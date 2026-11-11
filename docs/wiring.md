@@ -35,6 +35,8 @@ Avoid GPIO 0, 2, 12, 15 (boot strapping) for motor signals, GPIO 6-11 (flash), a
 - The V3.0 ships as STEP/DIR or UART. This unit has J2 bridged by a surface-mount link, so it is the UART variant. Do not alter J2.
 - `R_SENSE` is assumed 0.11 ohm and is not verified.
 - The TMC2208 needs VM present before it answers on UART.
+- **PDN_UART is the 4th header pin counting EN as 1** (EN, MS1, MS2, PDN_UART). Confirmed working on this unit. The GPIO 16 wire and the resistor from GPIO 17 must both land on that same pin. The 5th pin is also silkscreened PDN-UART but is NOT continuous with the 4th: leave it unconnected, and go by position, not by the label. Putting RX and TX on different pins gives zero bytes back.
+- UART test (sketch 04) PASSED: chip version 0x20 (TMC2208), writes counted by IFCNT, read-back OK. The current read-back comes from the same R_SENSE the library used to write it, so it does not verify R_SENSE.
 - The TMC2208 has no UART addressing. A second axis needs its own UART or a TMC2209.
 
 ## Power

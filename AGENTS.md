@@ -22,9 +22,9 @@ Motorise a ceiling-mounted camera boom so it swings horizontally around a vertic
 - Upload: macOS, port /dev/cu.usbserial-8410. Uploads failed at 921600 baud; use 115200.
 
 ## Status
-Working and tested: blink + button, optical endstop, sketch 03 WiFi station mode (joins the home network, gets 10.0.0.100 from the router). Written but UNTESTED: AP fallback path (not confirmed), TMC2208 UART test (sketch 04).
-Not yet done: TMC2208 UART test, first motor move, homing, UI.
-Next step: sketches/04_tmc2208_uart_test with motor disconnected and 12 V on VM only.
+Working and tested: blink + button, optical endstop, sketch 03 WiFi station mode (joins the home network, gets 10.0.0.100 from the router). TMC2208 UART test (sketch 04) PASSES. Written but UNTESTED: AP fallback path (not confirmed).
+Not yet done: first motor move, homing, UI.
+Next step: sketches/05 first motor move, motor connected but unloaded, low current (~400 mA), slow. Identify the two coil pairs with a multimeter first. Power off before connecting the motor.
 
 ## Safety requirements
 Boom swings at head height. Hardware e-stop independent of firmware and WiFi. Soft limits plus a physical stop. Finite moves only; jog must stop if the client heartbeat is lost. Home at low speed. Motor stays disabled until homed.

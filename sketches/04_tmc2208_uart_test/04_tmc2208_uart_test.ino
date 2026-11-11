@@ -4,7 +4,9 @@
 // SETUP: motor DISCONNECTED, 12 V on VM/GND only, ESP32 powered by USB,
 // grounds common. EN is held HIGH (driver disabled) the whole time.
 //
-// UNTESTED: written without hardware access.
+// STATUS: tested on hardware, RESULT: PASS (chip version 0x20, writes counted,
+// read-back OK). PDN_UART is the 4th header pin counting EN as 1; both the RX
+// wire and the TX resistor must be on that same pin.
 //
 // Library: TMCStepper (Arduino Library Manager).
 

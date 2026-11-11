@@ -13,7 +13,7 @@ Built up in small steps, so each hardware or software unknown is proven on its o
 | `01_blink_button` | Toolchain, upload, serial, input reading | Earlier version tested on hardware |
 | `02_opto_endstop` | Optical limit sensor (active-LOW) | Earlier version tested on hardware |
 | `03_wifi_ap_test` | Joins home WiFi (DHCP), serves test page; falls back to own access point | Station mode tested on hardware (joins home WiFi, DHCP). AP fallback untested |
-| `04_tmc2208_uart_test` | TMC2208 UART read/write check, no motion | Untested |
+| `04_tmc2208_uart_test` | TMC2208 UART read/write check, no motion | Tested on hardware: PASS |
 
 "Earlier version tested" means the original single-file sketch ran on the real board. Sketches 01 to 03 have since been split into a `config.h` per sketch and have not been recompiled, so report anything that fails to build.
 

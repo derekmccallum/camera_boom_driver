@@ -1,5 +1,5 @@
 // config.h - pins and tunables for the TMC2208 UART test.
-// UNTESTED: written without hardware access.
+// Tested on hardware: UART test passes. R_SENSE below is still NOT verified.
 #pragma once
 
 // Motor driver pins
