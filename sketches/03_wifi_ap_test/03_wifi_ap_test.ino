@@ -3,9 +3,9 @@
 // If the home network can't be joined, optionally falls back to its own access
 // point. No extra libraries: WiFi, WebServer and ESPmDNS ship with the ESP32 core.
 //
-// STATUS: the earlier access-point-only version was run on the real board and
-// worked from a tablet. THIS station-mode version is UNTESTED and not yet
-// compiled. Flag anything that fails.
+// STATUS: station mode (join home WiFi, DHCP) tested on the real board and
+// working. The access point FALLBACK path has not been tested since this
+// rewrite (the earlier AP-only version did work from a tablet).
 //
 // SETUP: copy secrets.example.h to secrets.h and fill in your network details.
 //   cp secrets.example.h secrets.h
