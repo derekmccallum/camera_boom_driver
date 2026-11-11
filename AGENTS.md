@@ -18,11 +18,11 @@ Motorise a ceiling-mounted camera boom so it swings horizontally around a vertic
 
 ## Software decisions
 - Arduino IDE, ESP32 Arduino core (pin the working version), custom firmware. Libraries: FastAccelStepper (step pulses), TMCStepper (UART config).
-- WiFi: join the home network as a station (DHCP address, hostname boom / boom.local), with an own-access-point fallback (BoomCtrl) so the tablet can still connect with no router. Credentials in secrets.h (gitignored). ESP32 is 2.4 GHz only. WebServer for now; move to a WebSocket UI later. Presets/calibration in Preferences. Moves use absolute targets from a homed position (never "move 120 from here").
+- WiFi: join the home network as a station (DHCP; the router allocates 10.0.0.100; hostname boom / boom.local), with an own-access-point fallback (BoomCtrl) so the tablet can still connect with no router. Credentials in secrets.h (gitignored). ESP32 is 2.4 GHz only. WebServer for now; move to a WebSocket UI later. Presets/calibration in Preferences. Moves use absolute targets from a homed position (never "move 120 from here").
 - Upload: macOS, port /dev/cu.usbserial-8410. Uploads failed at 921600 baud; use 115200.
 
 ## Status
-Working and tested: blink + button, optical endstop, WiFi AP-only test page. Written but UNTESTED: WiFi station mode with AP fallback (sketch 03 now), TMC2208 UART test (sketch 04).
+Working and tested: blink + button, optical endstop, sketch 03 WiFi station mode (joins the home network, gets 10.0.0.100 from the router). Written but UNTESTED: AP fallback path (not confirmed), TMC2208 UART test (sketch 04).
 Not yet done: TMC2208 UART test, first motor move, homing, UI.
 Next step: sketches/04_tmc2208_uart_test with motor disconnected and 12 V on VM only.
 
