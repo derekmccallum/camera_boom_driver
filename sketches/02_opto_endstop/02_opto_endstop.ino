@@ -2,8 +2,9 @@
 // Tests a 3-pin optical endstop (BIQU / TCST2103 type).
 // LED solid when the beam is clear, flashing when blocked.
 //
-// STATUS: an earlier version was run on the real sensor and worked once the
-// polarity was set to active-LOW. Since split into config.h; NOT recompiled.
+// STATUS: an earlier version was run on the real sensor. Polarity is now set to
+// active-HIGH to match the later bench measurement (sketch 06's '?' command).
+// Split into config.h and NOT recompiled or re-run since.
 //
 // Wiring (use the labels printed on the sensor PCB, not the cable plug order):
 //   sensor V  -> ESP32 3V3        (NOT 5V: the signal could then reach 5V)

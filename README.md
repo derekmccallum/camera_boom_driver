@@ -11,7 +11,7 @@ Built up in small steps, so each hardware or software unknown is proven on its o
 | Sketch | Purpose | State |
 |---|---|---|
 | `01_blink_button` | Toolchain, upload, serial, input reading | Earlier version tested on hardware |
-| `02_opto_endstop` | Optical limit sensor (active-LOW) | Earlier version tested on hardware |
+| `02_opto_endstop` | Optical limit sensor (active-HIGH as wired) | Earlier version tested; polarity constant since corrected, not re-run |
 | `03_wifi_ap_test` | Joins home WiFi (DHCP), serves test page; falls back to own access point | Station mode tested on hardware (joins home WiFi, DHCP). AP fallback untested |
 | `04_tmc2208_uart_test` | TMC2208 UART read/write check, no motion | Tested on hardware: PASS |
 | `05_first_motor_move` | First motor motion: unloaded, 400 mA, slow, serial-commanded finite moves, idle auto-disable | Tested on hardware: turns smoothly, no driver faults (3200 steps/rev assumed) |

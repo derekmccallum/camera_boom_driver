@@ -29,8 +29,8 @@ constexpr int PIN_LIMIT_CCW = 35;
 
 // Bench-measured with sketch 06's '?' command: with this wiring BOTH sensors read
 // HIGH when the beam is blocked and LOW when it is clear (active-HIGH), and the
-// sensor LED is lit when blocked. Sketch 02 and AGENTS.md record GPIO 34 as
-// active-LOW; that conflicts with this measurement and is unresolved.
+// sensor LED is lit when blocked. Confirmed correct by the user; older notes that
+// said GPIO 34 was active-LOW have been corrected.
 // Check with '?' (raw levels) if a sensor is ever swapped or rewired.
 constexpr bool CW_BLOCKED_IS_HIGH  = true;
 constexpr bool CCW_BLOCKED_IS_HIGH = true;

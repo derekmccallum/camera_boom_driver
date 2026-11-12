@@ -77,7 +77,7 @@ Result: smooth rotation at 397 mA and 16 microsteps, no driver faults. 3200 step
 | G | ESP32 GND |
 | S | GPIO 34 |
 
-TESTED: active-LOW when blocked (signal goes LOW with the beam interrupted), at 3.3 V. One reviewer reported the supplied cable plug order not matching the board's pin labels, so wire by the PCB labels.
+TESTED as currently wired at 3.3 V: ACTIVE-HIGH (signal reads LOW with the beam clear and HIGH when the beam is blocked, sensor LED lit when blocked). An earlier note here said active-LOW; that was an inference from sketch 02's LED behaviour and is superseded by the measurement with sketch 06's `?` command. One reviewer reported the supplied cable plug order not matching the board's pin labels, so wire by the PCB labels.
 
 ### Second sensor and the shuttle sketch (UNTESTED)
 
@@ -88,7 +88,32 @@ Sketch `06_limit_shuttle` uses two sensors, one at each end of the travel. Wire 
 | CW limit (the end reached by turning clockwise, viewed from above) | 3V3 | GND | GPIO 34 |
 | CCW limit | 3V3 | GND | GPIO 35 |
 
-- MEASURED on the bench with sketch 06's `?` command: with the beams clear both pins read LOW, and a blocked beam makes that sensor's pin read HIGH (active-HIGH, sensor LED lit when blocked). So `CW_BLOCKED_IS_HIGH` and `CCW_BLOCKED_IS_HIGH` in `sketches/06_limit_shuttle/config.h` are both `true`. This CONFLICTS with the active-LOW result recorded for GPIO 34 above and in AGENTS.md. Not resolved: possibly different wiring or a different sensor then. Re-check with `?` (raw pin levels, beam clear and blocked) if a sensor is swapped or rewired.
+Wiring diagram (3V3 and GND each feed both sensors; each S goes to its own GPIO):
+
+```
+ ESP32 30-pin board                 SENSOR 1 (CW limit)
+ +---------------+
+ | 3V3 ----------+--+-------------> V
+ |               |  |               G <---------+
+ | GPIO 34 <-----+--|---------------S           |
+ |               |  |                           |
+ |               |  |               SENSOR 2 (CCW limit)
+ |               |  +-------------> V
+ | GPIO 35 <-----+------------------S
+ |               |                  G <---------+
+ | GND ----------+------------------------------+
+ +---------------+
+```
+
+Wiring notes:
+
+- Wire by the labels printed on each sensor's PCB (V, G, S), not by the cable plug order, which one reviewer found did not match the board.
+- Power both sensors from 3V3, never 5V: a 5V signal on a GPIO can damage the ESP32. Each sensor draws about 20 mA.
+- GPIO 34 and 35 are input-only with no internal pull-up, so each sensor board's own pull-up does the work. An unplugged sensor leaves the pin floating, so it can read anything.
+- Keep the sensor leads short and away from the motor wires. If you see false triggers, add 100 nF across S and G at the sensor.
+- Mount a hard mechanical stop beyond each sensor, and make each flag long enough that the boom can finish decelerating while the sensor is still blocked. An optical sensor that loses power or a wire that falls off reads "clear", so the firmware cannot rely on the sensors alone.
+
+- MEASURED on the bench with sketch 06's `?` command: with the beams clear both pins read LOW, and a blocked beam makes that sensor's pin read HIGH (active-HIGH, sensor LED lit when blocked). So `CW_BLOCKED_IS_HIGH` and `CCW_BLOCKED_IS_HIGH` in `sketches/06_limit_shuttle/config.h` are both `true`. The user has confirmed this measurement is correct. Re-check with `?` (raw pin levels, beam clear and blocked) if a sensor is swapped or rewired.
 - UNTESTED. Which DIR level turns the boom clockwise depends on how the motor is mounted: `CW_IS_DIR_HIGH` in the same file. Watch the first run. If the boom goes the wrong way it reaches the other sensor first and the sketch stops with "wrong limit: check direction or sensor wiring"; flip the constant and reset.
 - The sketch auto-starts 5 s after boot (send `s` to abort). It is unloaded-motor only at 400 mA. Keep a hand on the e-stop and a physical stop in place: an optical sensor that loses power or a wire that falls off reads "clear".
 - Both sensors blocked at once, or either sensor on a cable fault that makes it read blocked, ends in a fault and a disabled motor.
@@ -96,7 +121,7 @@ Sketch `06_limit_shuttle` uses two sensors, one at each end of the travel. Wire 
 ## Bring-up order
 
 1. `01_blink_button` - done
-2. `02_opto_endstop` - done (active-LOW)
+2. `02_opto_endstop` - done (sketch config now set active-HIGH to match the measured wiring; not re-run since)
 3. `03_wifi_ap_test` - done (station mode on the home network; AP fallback untested)
 4. `04_tmc2208_uart_test` - done: PASS with motor disconnected, 12 V on VM, EN held HIGH
 5. `05_first_motor_move` - done: unloaded motor, 400 mA, smooth
