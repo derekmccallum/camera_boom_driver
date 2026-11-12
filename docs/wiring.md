@@ -1,8 +1,10 @@
 # Wiring
 
-Planning notes. Pin positions on the BTT driver are from the standard StepStick layout and BTT's documentation; confirm against the silkscreen on your own boards. Calculated figures (ratio, steps per degree, current) are estimates.
+Wiring notes. Sections are marked TESTED where the arrangement has been run on the real hardware, and otherwise are plans. Go by the silkscreen on your own boards, not by the standard StepStick layout: this BTT driver's pin names and the PDN_UART pin position both differ from what the standard layout suggests. Calculated figures (ratio, steps per degree, current) are estimates.
 
 ## ESP32 pin plan
+
+STEP, DIR, EN and the UART pins below are TESTED with sketches 04 and 05. The second limit sensor and the buttons are still plans.
 
 | Function | GPIO | Notes |
 |---|---|---|
@@ -36,14 +38,19 @@ Avoid GPIO 0, 2, 12, 15 (boot strapping) for motor signals, GPIO 6-11 (flash), a
 - `R_SENSE` is assumed 0.11 ohm and is not verified.
 - The TMC2208 needs VM present before it answers on UART.
 - **PDN_UART is the 4th header pin counting EN as 1** (EN, MS1, MS2, PDN_UART). Confirmed working on this unit. The GPIO 16 wire and the resistor from GPIO 17 must both land on that same pin. The 5th pin is also silkscreened PDN-UART but is NOT continuous with the 4th: leave it unconnected, and go by position, not by the label. Putting RX and TX on different pins gives zero bytes back.
-- UART test (sketch 04) PASSED: chip version 0x20 (TMC2208), writes counted by IFCNT, read-back OK. The current read-back comes from the same R_SENSE the library used to write it, so it does not verify R_SENSE.
+- TESTED. UART test (sketch 04) PASSED: chip version 0x20 (TMC2208), writes counted by IFCNT, read-back OK. The current read-back comes from the same R_SENSE the library used to write it, so it does not verify R_SENSE.
+- TESTED. First motor move (sketch 05) works: the driver holds 16 microsteps and 397 mA with no over-temperature, short or open-load flags, and the motor runs smoothly up to 2800 Hz unloaded.
 - The TMC2208 has no UART addressing. A second axis needs its own UART or a TMC2209.
 
-## Motor (NEMA 17, 4-wire harness)
+## Motor (HANPOSE 17HS4401S, NEMA 17, 4-wire harness)
+
+Seller listings disagree on the ratings: about 1.5 to 1.7 A per phase, 1.5 to 1.8 ohm, 2.8 to 3.8 mH, 40 to 43 N.cm holding torque. Torque scales roughly with current, so the 400 mA used in the bench tests gives only about a quarter of the holding torque. For the loaded build use a higher current (roughly 800 to 1000 mA RMS to start, below the TMC2208's 1.2 A RMS rating), fit the heatsink, and watch driver and motor temperatures.
 
 This driver's motor pins are labelled **OA1, OA2, OB1, OB2** (not 1A/1B/2A/2B). OA1 and OA2 are the two ends of one driver coil, and OB1 and OB2 are the two ends of the other. Both wires of one MOTOR coil must go to the SAME driver coil.
 
-Measured on this motor: each coil is about 2.5 ohm.
+Measured through the harness: each coil is about 2.5 ohm (more than the listed 1.5 to 1.8 ohm, probably meter lead and cable resistance). Colours do NOT follow the common convention on this harness: red/green is one coil and blue/black the other, so always measure.
+
+TESTED wiring:
 
 | Motor wire | Motor coil | Driver pin |
 |---|---|---|
@@ -52,11 +59,12 @@ Measured on this motor: each coil is about 2.5 ohm.
 | Blue | coil 2 | OB1 |
 | Black | coil 2 | OB2 |
 
-Confirmed working: smooth rotation at 397 mA and 16 microsteps, no driver faults. 3200 steps per revolution is assumed (200 full steps x 16) and one turn per 3200 steps has not been explicitly measured. Wiring red/green/blue/black to OA1/OB1/OA2/OB2 (crossing the coils) gives a stuttering half-turn. Swapping the two wires within a coil only reverses direction. Never connect or disconnect the motor with the supply on.
+Result: smooth rotation at 397 mA and 16 microsteps, no driver faults. 3200 steps per revolution is assumed (200 full steps x 16) and one turn per 3200 steps has not been explicitly measured. Wiring red/green/blue/black to OA1/OB1/OA2/OB2 (crossing the coils) gives a stuttering half-turn. Swapping the two wires within a coil only reverses direction. Never connect or disconnect the motor with the supply on.
 
 ## Power
 
 - Motor supply: 12 V brick. Voltage, current and polarity are **not yet confirmed from its label**. Check before wiring.
+- **Power order: switch the 12 V on BEFORE the ESP32 starts (or press the ESP32 EN/reset button after the 12 V is on).** The sketches configure the driver only at boot. One bench run showed the driver on its defaults (8 microsteps, about 718 mA) with the setup lines reporting no reply, which fits the ESP32 having booted with the 12 V off.
 - Keep the ESP32 on USB during bench tests. Do not also feed the 12 V into the ESP32 board's DC jack. The two supplies share only ground.
 - Final build: fuse, then e-stop (cutting the motor supply only, so the ESP32 stays alive), then the capacitor and driver.
 - Never connect or disconnect the motor with the supply on.
@@ -69,15 +77,15 @@ Confirmed working: smooth rotation at 397 mA and 16 microsteps, no driver faults
 | G | ESP32 GND |
 | S | GPIO 34 |
 
-Tested as active-LOW when blocked. One reviewer reported the supplied cable plug order not matching the board's pin labels, so wire by the PCB labels.
+TESTED: active-LOW when blocked (signal goes LOW with the beam interrupted), at 3.3 V. One reviewer reported the supplied cable plug order not matching the board's pin labels, so wire by the PCB labels.
 
 ## Bring-up order
 
-1. `01_blink_button`
-2. `02_opto_endstop`
-3. `03_wifi_ap_test`
-4. `04_tmc2208_uart_test`: motor disconnected, 12 V on VM, EN held HIGH
-5. First motor move, unloaded, low current (to be written)
-6. Homing, then absolute moves in degrees
+1. `01_blink_button` - done
+2. `02_opto_endstop` - done (active-LOW)
+3. `03_wifi_ap_test` - done (station mode on the home network; AP fallback untested)
+4. `04_tmc2208_uart_test` - done: PASS with motor disconnected, 12 V on VM, EN held HIGH
+5. `05_first_motor_move` - done: unloaded motor, 400 mA, smooth
+6. Homing on the optical endstop, then absolute moves in degrees (next)
 7. Buttons, then the web UI and saved presets
 8. Calibrate steps per degree on the real arm
