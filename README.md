@@ -4,6 +4,12 @@ ESP32 firmware to motorise a ceiling-mounted camera boom. The boom swings horizo
 
 Design decisions, safety requirements and working rules live in [AGENTS.md](AGENTS.md). Wiring and bring-up are in [docs/wiring.md](docs/wiring.md).
 
+## Wiring diagram
+
+![Complete wiring diagram](docs/wiring_diagram.png)
+
+Solid lines are built and tested; the fuse and e-stop are drawn dashed because they are planned. The 12 V brick's label, the driver's pin order and the TX resistor value are not confirmed, so go by the silkscreen on each module.
+
 ## Sketches
 
 Built up in small steps, so each hardware or software unknown is proven on its own. Arduino needs one sketch per folder.

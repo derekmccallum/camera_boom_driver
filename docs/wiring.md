@@ -2,6 +2,12 @@
 
 Wiring notes. Sections are marked TESTED where the arrangement has been run on the real hardware, and otherwise are plans. Go by the silkscreen on your own boards, not by the standard StepStick layout: this BTT driver's pin names and the PDN_UART pin position both differ from what the standard layout suggests. Calculated figures (ratio, steps per degree, current) are estimates.
 
+## Wiring diagram
+
+![Complete wiring diagram](wiring_diagram.png)
+
+Solid lines are built and tested; the fuse and e-stop are planned and drawn dashed. Buttons and a second axis are not drawn. The 12 V brick's label, the driver's pin order and the TX resistor value are unconfirmed, so go by the silkscreen on each module. The tables below are the detail behind this diagram.
+
 ## ESP32 pin plan
 
 STEP, DIR, EN and the UART pins below are TESTED with sketches 04 and 05. The second limit sensor and the buttons are still plans.

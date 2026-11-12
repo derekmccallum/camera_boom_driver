@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" width="1200" height="840">
+<rect width="1200" height="840" fill="#ffffff"/>
+<text x="40" y="30" font-size="20" text-anchor="start" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">Camera boom driver: complete wiring</text>
+<text x="440" y="30" font-size="12" text-anchor="start" font-weight="normal" fill="#607d8b" font-family="Helvetica, Arial, sans-serif">Solid = built and tested, dashed = planned. On the modules, go by the silkscreen labels.</text>
+<rect x="40" y="50" width="160" height="80" rx="8" fill="#f4f6f8" stroke="#455a64" stroke-width="1.5"/>
+<text x="120" y="82" font-size="14" text-anchor="middle" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">12 V DC brick</text>
+<text x="120" y="101" font-size="11" text-anchor="middle" font-weight="normal" fill="#555" font-family="Helvetica, Arial, sans-serif">check the label first:</text>
+<text x="120" y="115" font-size="11" text-anchor="middle" font-weight="normal" fill="#555" font-family="Helvetica, Arial, sans-serif">voltage, current, polarity</text>
+<rect x="290" y="190" width="180" height="390" rx="8" fill="#f4f6f8" stroke="#455a64" stroke-width="1.5"/>
+<text x="380" y="212" font-size="14" text-anchor="middle" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">ESP32 DevKit</text>
+<text x="380" y="228" font-size="11" text-anchor="middle" font-weight="normal" fill="#555" font-family="Helvetica, Arial, sans-serif">30-pin, CH340, USB-C</text>
+<rect x="620" y="190" width="210" height="390" rx="8" fill="#f4f6f8" stroke="#455a64" stroke-width="1.5"/>
+<text x="725" y="206" font-size="14" text-anchor="middle" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">BTT TMC2208 V3.0</text>
+<text x="725" y="221" font-size="11" text-anchor="middle" font-weight="normal" fill="#555" font-family="Helvetica, Arial, sans-serif">UART variant, J2 fitted</text>
+<rect x="1010" y="270" width="170" height="170" rx="8" fill="#f4f6f8" stroke="#455a64" stroke-width="1.5"/>
+<text x="1095" y="290" font-size="13" text-anchor="middle" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">HANPOSE 17HS4401S</text>
+<rect x="30" y="190" width="140" height="110" rx="8" fill="#f4f6f8" stroke="#455a64" stroke-width="1.5"/>
+<text x="100" y="206" font-size="12" text-anchor="middle" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">Endstop 1: CW limit</text>
+<rect x="30" y="330" width="140" height="110" rx="8" fill="#f4f6f8" stroke="#455a64" stroke-width="1.5"/>
+<text x="100" y="346" font-size="12" text-anchor="middle" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">Endstop 2: CCW limit</text>
+<polyline points="200,75 235,75" fill="none" stroke="#b71c1c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="235" y="60" width="110" height="30" rx="8" fill="#fff" stroke="#888" stroke-width="1.5" stroke-dasharray="5,4"/>
+<text x="290" y="79" font-size="10.5" text-anchor="middle" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">~3 A fuse (planned)</text>
+<polyline points="345,75 375,75" fill="none" stroke="#b71c1c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="375" y="60" width="120" height="30" rx="8" fill="#fff" stroke="#888" stroke-width="1.5" stroke-dasharray="5,4"/>
+<text x="435" y="79" font-size="10.5" text-anchor="middle" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">E-stop NC (planned)</text>
+<polyline points="495,75 870,75 870,262 830,262" fill="none" stroke="#b71c1c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="208" y="70" font-size="14" text-anchor="start" font-weight="bold" fill="#b71c1c" font-family="Helvetica, Arial, sans-serif">+</text>
+<text x="208" y="115" font-size="14" text-anchor="start" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">−</text>
+<polyline points="200,110 850,110 850,230 830,230" fill="none" stroke="#222" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="850" y1="230" x2="850" y2="240" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<line x1="840" y1="240" x2="860" y2="240" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<line x1="850" y1="252" x2="850" y2="262" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<path d="M840,252 Q850,245 860,252" fill="none" stroke="#222" stroke-width="2"/>
+<circle cx="850" cy="230" r="3.5" fill="#222"/>
+<circle cx="850" cy="262" r="3.5" fill="#b71c1c"/>
+<text x="885" y="236" font-size="11" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">470 µF electrolytic</text>
+<text x="885" y="250" font-size="11" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">(+ to VM, − to GND)</text>
+<text x="885" y="264" font-size="11" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">rated above 25 V</text>
+<circle cx="620" cy="250" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="630" y="254" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">EN</text>
+<circle cx="620" cy="280" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="630" y="284" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">MS1 (leave open)</text>
+<circle cx="620" cy="310" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="630" y="314" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">MS2 (leave open)</text>
+<circle cx="620" cy="340" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="630" y="344" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">PDN_UART (4th pin)</text>
+<circle cx="620" cy="370" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="630" y="374" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">5th pin: leave open</text>
+<circle cx="620" cy="400" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="630" y="404" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">STEP</text>
+<circle cx="620" cy="430" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="630" y="434" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">DIR</text>
+<circle cx="620" cy="490" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="630" y="494" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">GND</text>
+<circle cx="620" cy="520" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="630" y="524" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">VIO</text>
+<circle cx="830" cy="230" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="820" y="234" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">GND</text>
+<circle cx="830" cy="262" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="820" y="266" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">VM</text>
+<circle cx="830" cy="310" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="820" y="314" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">OA1</text>
+<circle cx="830" cy="340" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="820" y="344" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">OA2</text>
+<circle cx="830" cy="370" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="820" y="374" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">OB1</text>
+<circle cx="830" cy="400" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="820" y="404" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">OB2</text>
+<text x="725" y="548" font-size="10.5" text-anchor="middle" font-weight="normal" fill="#666" font-family="Helvetica, Arial, sans-serif">Pin order on your module may differ:</text>
+<text x="725" y="562" font-size="10.5" text-anchor="middle" font-weight="normal" fill="#666" font-family="Helvetica, Arial, sans-serif">check the silkscreen before wiring.</text>
+<circle cx="470" cy="250" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="460" y="254" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">GPIO27</text>
+<circle cx="470" cy="340" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="460" y="344" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">GPIO16 (RX2)</text>
+<circle cx="470" cy="368" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="460" y="372" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">GPIO17 (TX2)</text>
+<circle cx="470" cy="400" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="460" y="404" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">GPIO25</text>
+<circle cx="470" cy="430" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="460" y="434" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">GPIO26</text>
+<circle cx="470" cy="490" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="460" y="494" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">GND</text>
+<circle cx="470" cy="520" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="460" y="524" font-size="11.5" text-anchor="end" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">3V3</text>
+<circle cx="290" cy="250" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="300" y="254" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">GPIO34</text>
+<circle cx="290" cy="390" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="300" y="394" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">GPIO35</text>
+<text x="380" y="548" font-size="10.5" text-anchor="middle" font-weight="normal" fill="#666" font-family="Helvetica, Arial, sans-serif">Powered from USB.</text>
+<text x="380" y="562" font-size="10.5" text-anchor="middle" font-weight="normal" fill="#666" font-family="Helvetica, Arial, sans-serif">Not from the 12 V brick.</text>
+<polyline points="470,250 620,250" fill="none" stroke="#1976d2" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="470,340 620,340" fill="none" stroke="#7b1fa2" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="470,368 500,368" fill="none" stroke="#7b1fa2" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="500" y="362" width="40" height="12" rx="2" fill="#fff" stroke="#7b1fa2" stroke-width="1.5"/>
+<text x="520" y="356" font-size="11" text-anchor="middle" font-weight="normal" fill="#7b1fa2" font-family="Helvetica, Arial, sans-serif">≈1 kΩ</text>
+<polyline points="540,368 575,368 575,340" fill="none" stroke="#7b1fa2" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="575" cy="340" r="3.5" fill="#7b1fa2"/>
+<polyline points="470,400 620,400" fill="none" stroke="#1976d2" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="470,430 620,430" fill="none" stroke="#1976d2" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="470,490 620,490" fill="none" stroke="#222" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="470,520 620,520" fill="none" stroke="#ef6c00" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="830,310 1010,310" fill="none" stroke="#d32f2f" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1010" cy="310" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="1018" y="314" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">Red</text>
+<polyline points="830,340 1010,340" fill="none" stroke="#2e7d32" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1010" cy="340" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="1018" y="344" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">Green</text>
+<polyline points="830,370 1010,370" fill="none" stroke="#1565c0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1010" cy="370" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="1018" y="374" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">Blue</text>
+<polyline points="830,400 1010,400" fill="none" stroke="#212121" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1010" cy="400" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="1018" y="404" font-size="11.5" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">Black</text>
+<polyline points="1115,310 1125,310 1125,340 1115,340" fill="none" stroke="#666" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1172" y="329" font-size="11" text-anchor="end" font-weight="normal" fill="#555" font-family="Helvetica, Arial, sans-serif">coil 1</text>
+<polyline points="1115,370 1125,370 1125,400 1115,400" fill="none" stroke="#666" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="1172" y="389" font-size="11" text-anchor="end" font-weight="normal" fill="#555" font-family="Helvetica, Arial, sans-serif">coil 2</text>
+<text x="1095" y="458" font-size="11" text-anchor="middle" font-weight="normal" fill="#555" font-family="Helvetica, Arial, sans-serif">NEMA 17, 1.8°, 5 mm shaft</text>
+<text x="1095" y="472" font-size="11" text-anchor="middle" font-weight="normal" fill="#555" font-family="Helvetica, Arial, sans-serif">about 2.5 Ω per coil (measured)</text>
+<circle cx="170" cy="225" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="38" y="229" font-size="12" text-anchor="start" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">V</text>
+<circle cx="170" cy="250" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="38" y="254" font-size="12" text-anchor="start" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">S</text>
+<circle cx="170" cy="275" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="38" y="279" font-size="12" text-anchor="start" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">G</text>
+<line x1="170" y1="225" x2="195" y2="225" stroke="#ef6c00" stroke-width="2" stroke-linecap="round"/>
+<rect x="195" y="216" width="38" height="18" rx="9" fill="#ffe0b2" stroke="#ef6c00" stroke-width="1.5"/>
+<text x="214" y="229" font-size="11" text-anchor="middle" font-weight="bold" fill="#bf360c" font-family="Helvetica, Arial, sans-serif">3V3</text>
+<line x1="170" y1="275" x2="195" y2="275" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<line x1="195" y1="275" x2="195" y2="283" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<line x1="186" y1="283" x2="204" y2="283" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<line x1="189" y1="287" x2="201" y2="287" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<line x1="192" y1="291" x2="198" y2="291" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<polyline points="170,250 290,250" fill="none" stroke="#00897b" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="170" cy="365" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="38" y="369" font-size="12" text-anchor="start" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">V</text>
+<circle cx="170" cy="390" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="38" y="394" font-size="12" text-anchor="start" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">S</text>
+<circle cx="170" cy="415" r="3" fill="#fff" stroke="#455a64" stroke-width="1.5"/>
+<text x="38" y="419" font-size="12" text-anchor="start" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">G</text>
+<line x1="170" y1="365" x2="195" y2="365" stroke="#ef6c00" stroke-width="2" stroke-linecap="round"/>
+<rect x="195" y="356" width="38" height="18" rx="9" fill="#ffe0b2" stroke="#ef6c00" stroke-width="1.5"/>
+<text x="214" y="369" font-size="11" text-anchor="middle" font-weight="bold" fill="#bf360c" font-family="Helvetica, Arial, sans-serif">3V3</text>
+<line x1="170" y1="415" x2="195" y2="415" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<line x1="195" y1="415" x2="195" y2="423" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<line x1="186" y1="423" x2="204" y2="423" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<line x1="189" y1="427" x2="201" y2="427" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<line x1="192" y1="431" x2="198" y2="431" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+<polyline points="170,390 290,390" fill="none" stroke="#00897b" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="30" y="462" font-size="10.5" text-anchor="start" font-weight="normal" fill="#555" font-family="Helvetica, Arial, sans-serif">Wire by the labels printed on each</text>
+<text x="30" y="475" font-size="10.5" text-anchor="start" font-weight="normal" fill="#555" font-family="Helvetica, Arial, sans-serif">sensor PCB, not by the cable plug order.</text>
+<text x="30" y="488" font-size="10.5" text-anchor="start" font-weight="normal" fill="#555" font-family="Helvetica, Arial, sans-serif">3.3 V only, never 5 V. Measured: S reads</text>
+<text x="30" y="501" font-size="10.5" text-anchor="start" font-weight="normal" fill="#555" font-family="Helvetica, Arial, sans-serif">HIGH when the beam is blocked.</text>
+<text x="235" y="203" font-size="10" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif"></text>
+<rect x="880" y="492" width="300" height="92" rx="8" fill="#fff" stroke="#cfd8dc" stroke-width="1.5"/>
+<line x1="895" y1="512" x2="917" y2="512" stroke="#b71c1c" stroke-width="3" stroke-linecap="round"/>
+<text x="925" y="516" font-size="11" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">12 V supply</text>
+<line x1="895" y1="530" x2="917" y2="530" stroke="#222" stroke-width="3" stroke-linecap="round"/>
+<text x="925" y="534" font-size="11" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">Ground</text>
+<line x1="895" y1="548" x2="917" y2="548" stroke="#ef6c00" stroke-width="2" stroke-linecap="round"/>
+<text x="925" y="552" font-size="11" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">3.3 V (tag)</text>
+<line x1="895" y1="566" x2="917" y2="566" stroke="#1976d2" stroke-width="2" stroke-linecap="round"/>
+<text x="925" y="570" font-size="11" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">STEP / DIR / EN</text>
+<line x1="1040" y1="512" x2="1062" y2="512" stroke="#7b1fa2" stroke-width="2" stroke-linecap="round"/>
+<text x="1070" y="516" font-size="11" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">UART (PDN_UART)</text>
+<line x1="1040" y1="530" x2="1062" y2="530" stroke="#00897b" stroke-width="2" stroke-linecap="round"/>
+<text x="1070" y="534" font-size="11" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">Sensor signal</text>
+<line x1="1040" y1="548" x2="1062" y2="548" stroke="#2e7d32" stroke-width="2.5" stroke-linecap="round"/>
+<text x="1070" y="552" font-size="11" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">Motor coil wires</text>
+<line x1="1040" y1="566" x2="1062" y2="566" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-dasharray="4,3"/>
+<text x="1070" y="570" font-size="11" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">Planned</text>
+<text x="895" y="597" font-size="10" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif"></text>
+<text x="880" y="600" font-size="10" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif"></text>
+<rect x="40" y="606" width="1140" height="214" rx="8" fill="#fafafa" stroke="#cfd8dc" stroke-width="1.5"/>
+<text x="56" y="628" font-size="13" text-anchor="start" font-weight="bold" fill="#222" font-family="Helvetica, Arial, sans-serif">Notes</text>
+<text x="56" y="652" font-size="12" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">1. Switch the 12 V on first, then power or reset the ESP32.</text>
+<text x="56" y="674" font-size="12" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">    The sketches configure the driver only at boot.</text>
+<text x="56" y="696" font-size="12" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">2. Never connect or disconnect the motor with the 12 V on.</text>
+<text x="56" y="718" font-size="12" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">3. Common ground: brick −, driver GND and ESP32 GND are joined.</text>
+<text x="56" y="740" font-size="12" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">4. PDN_UART: GPIO16 and the resistor from GPIO17 meet at the 4th pin.</text>
+<text x="56" y="762" font-size="12" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">    The 5th pin has the same label but is not connected to the chip.</text>
+<text x="560" y="652" font-size="12" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">5. Coils: red + green = coil 1 (OA1, OA2), blue + black = coil 2 (OB1, OB2).</text>
+<text x="560" y="674" font-size="12" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">    Both wires of a motor coil go to the same driver coil.</text>
+<text x="560" y="696" font-size="12" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">6. Fuse and e-stop are planned. The e-stop cuts the motor supply only.</text>
+<text x="560" y="718" font-size="12" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">7. Fit hard stops beyond each sensor: a sensor that loses power reads clear.</text>
+<text x="560" y="740" font-size="12" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">8. 400 mA is a bench setting. Raise it for the loaded boom (driver max 1.2 A RMS).</text>
+<text x="560" y="762" font-size="12" text-anchor="start" font-weight="normal" fill="#222" font-family="Helvetica, Arial, sans-serif">9. Buttons (GPIO TBD) and a second axis are not drawn yet.</text>
+</svg>
