@@ -15,10 +15,11 @@ Built up in small steps, so each hardware or software unknown is proven on its o
 | `03_wifi_ap_test` | Joins home WiFi (DHCP), serves test page; falls back to own access point | Station mode tested on hardware (joins home WiFi, DHCP). AP fallback untested |
 | `04_tmc2208_uart_test` | TMC2208 UART read/write check, no motion | Tested on hardware: PASS |
 | `05_first_motor_move` | First motor motion: unloaded, 400 mA, slow, serial-commanded finite moves, idle auto-disable | Tested on hardware: turns smoothly, no driver faults (3200 steps/rev assumed) |
+| `06_limit_shuttle` | Unloaded, 400 mA. Auto-starts after a 5 s countdown: seeks the CW sensor, measures travel to the CCW sensor, then shuttles between them forever, logging the position error at each hit | UNTESTED on hardware (compiles for ESP32 Dev Module). Sensors measured active-HIGH on the bench (conflicts with the active-LOW note for sketch 02). Clockwise DIR level unverified |
 
 "Earlier version tested" means the original single-file sketch ran on the real board. Sketches 01 to 03 have since been split into a `config.h` per sketch and have not been recompiled, so report anything that fails to build.
 
-Not yet written: homing, absolute moves in degrees, buttons, the web UI.
+Not yet written: homing in the final form, absolute moves in degrees, buttons, the web UI. Sketch 06 contains a first seek-to-limit, but it is untested.
 
 ## Setup
 

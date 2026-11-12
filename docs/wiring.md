@@ -79,6 +79,20 @@ Result: smooth rotation at 397 mA and 16 microsteps, no driver faults. 3200 step
 
 TESTED: active-LOW when blocked (signal goes LOW with the beam interrupted), at 3.3 V. One reviewer reported the supplied cable plug order not matching the board's pin labels, so wire by the PCB labels.
 
+### Second sensor and the shuttle sketch (UNTESTED)
+
+Sketch `06_limit_shuttle` uses two sensors, one at each end of the travel. Wire the second sensor the same way as the first, by the PCB labels:
+
+| Sensor | V | G | S |
+|---|---|---|---|
+| CW limit (the end reached by turning clockwise, viewed from above) | 3V3 | GND | GPIO 34 |
+| CCW limit | 3V3 | GND | GPIO 35 |
+
+- MEASURED on the bench with sketch 06's `?` command: with the beams clear both pins read LOW, and a blocked beam makes that sensor's pin read HIGH (active-HIGH, sensor LED lit when blocked). So `CW_BLOCKED_IS_HIGH` and `CCW_BLOCKED_IS_HIGH` in `sketches/06_limit_shuttle/config.h` are both `true`. This CONFLICTS with the active-LOW result recorded for GPIO 34 above and in AGENTS.md. Not resolved: possibly different wiring or a different sensor then. Re-check with `?` (raw pin levels, beam clear and blocked) if a sensor is swapped or rewired.
+- UNTESTED. Which DIR level turns the boom clockwise depends on how the motor is mounted: `CW_IS_DIR_HIGH` in the same file. Watch the first run. If the boom goes the wrong way it reaches the other sensor first and the sketch stops with "wrong limit: check direction or sensor wiring"; flip the constant and reset.
+- The sketch auto-starts 5 s after boot (send `s` to abort). It is unloaded-motor only at 400 mA. Keep a hand on the e-stop and a physical stop in place: an optical sensor that loses power or a wire that falls off reads "clear".
+- Both sensors blocked at once, or either sensor on a cable fault that makes it read blocked, ends in a fault and a disabled motor.
+
 ## Bring-up order
 
 1. `01_blink_button` - done
@@ -86,6 +100,7 @@ TESTED: active-LOW when blocked (signal goes LOW with the beam interrupted), at 
 3. `03_wifi_ap_test` - done (station mode on the home network; AP fallback untested)
 4. `04_tmc2208_uart_test` - done: PASS with motor disconnected, 12 V on VM, EN held HIGH
 5. `05_first_motor_move` - done: unloaded motor, 400 mA, smooth
-6. Homing on the optical endstop, then absolute moves in degrees (next)
-7. Buttons, then the web UI and saved presets
-8. Calibrate steps per degree on the real arm
+6. `06_limit_shuttle` - written, UNTESTED: seek CW limit, measure travel, shuttle between both sensors
+7. Homing on the optical endstop, then absolute moves in degrees (next)
+8. Buttons, then the web UI and saved presets
+9. Calibrate steps per degree on the real arm
