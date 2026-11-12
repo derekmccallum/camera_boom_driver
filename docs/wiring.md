@@ -125,7 +125,7 @@ Wiring notes:
 3. `03_wifi_ap_test` - done (station mode on the home network; AP fallback untested)
 4. `04_tmc2208_uart_test` - done: PASS with motor disconnected, 12 V on VM, EN held HIGH
 5. `05_first_motor_move` - done: unloaded motor, 400 mA, smooth
-6. `06_limit_shuttle` - written, UNTESTED: seek CW limit, measure travel, shuttle between both sensors
+6. `06_limit_shuttle` - written, PASS: seek CW limit, measure travel, shuttle between both sensors
 7. Homing on the optical endstop, then absolute moves in degrees (next)
 8. Buttons, then the web UI and saved presets
 9. Calibrate steps per degree on the real arm
