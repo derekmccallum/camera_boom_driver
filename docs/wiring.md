@@ -29,7 +29,7 @@ Avoid GPIO 0, 2, 12, 15 (boot strapping) for motor signals, GPIO 6-11 (flash), a
 | GND (logic side) | ESP32 GND, common with supply negative |
 | EN / STEP / DIR | GPIO 27 / 25 / 26 |
 | PDN_UART | GPIO 16 direct, and GPIO 17 via 1k |
-| 2B 2A 1A 1B | Motor coils (leave disconnected for the first UART test) |
+| OA1 OA2 OB1 OB2 | Motor coils, see the Motor section below (leave disconnected for the first UART test) |
 | MS1, MS2 | Unconnected |
 
 - The V3.0 ships as STEP/DIR or UART. This unit has J2 bridged by a surface-mount link, so it is the UART variant. Do not alter J2.
@@ -38,6 +38,21 @@ Avoid GPIO 0, 2, 12, 15 (boot strapping) for motor signals, GPIO 6-11 (flash), a
 - **PDN_UART is the 4th header pin counting EN as 1** (EN, MS1, MS2, PDN_UART). Confirmed working on this unit. The GPIO 16 wire and the resistor from GPIO 17 must both land on that same pin. The 5th pin is also silkscreened PDN-UART but is NOT continuous with the 4th: leave it unconnected, and go by position, not by the label. Putting RX and TX on different pins gives zero bytes back.
 - UART test (sketch 04) PASSED: chip version 0x20 (TMC2208), writes counted by IFCNT, read-back OK. The current read-back comes from the same R_SENSE the library used to write it, so it does not verify R_SENSE.
 - The TMC2208 has no UART addressing. A second axis needs its own UART or a TMC2209.
+
+## Motor (NEMA 17, 4-wire harness)
+
+This driver's motor pins are labelled **OA1, OA2, OB1, OB2** (not 1A/1B/2A/2B). OA1 and OA2 are the two ends of one driver coil, and OB1 and OB2 are the two ends of the other. Both wires of one MOTOR coil must go to the SAME driver coil.
+
+Measured on this motor: each coil is about 2.5 ohm.
+
+| Motor wire | Motor coil | Driver pin |
+|---|---|---|
+| Red | coil 1 | OA1 |
+| Green | coil 1 | OA2 |
+| Blue | coil 2 | OB1 |
+| Black | coil 2 | OB2 |
+
+Confirmed working: smooth rotation at 397 mA and 16 microsteps, no driver faults. 3200 steps per revolution is assumed (200 full steps x 16) and one turn per 3200 steps has not been explicitly measured. Wiring red/green/blue/black to OA1/OB1/OA2/OB2 (crossing the coils) gives a stuttering half-turn. Swapping the two wires within a coil only reverses direction. Never connect or disconnect the motor with the supply on.
 
 ## Power
 

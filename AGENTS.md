@@ -11,7 +11,8 @@ Motorise a ceiling-mounted camera boom so it swings horizontally around a vertic
 
 ## Electronics (decided)
 - ESP32 30-pin dev board (CH340, ESP32-D0WD-V3) on a breakout/power board; header jumper set to 3.3 V. Classic ESP32 only (not S3/C3).
-- Driver: BIGTREETECH TMC2208 V3.0, UART variant (J2 fitted). Single-wire UART: ESP32 RX GPIO16 direct to PDN_UART, TX GPIO17 through 1k to PDN_UART. Assumed R_SENSE 0.11 ohm (not verified). The TMC2208 has no UART addressing, so a second axis needs its own UART or a TMC2209.
+- Driver: BIGTREETECH TMC2208 V3.0, UART variant (J2 fitted). Single-wire UART: ESP32 RX GPIO16 direct to PDN_UART, TX GPIO17 through 1k to PDN_UART. PDN_UART is the 4th header pin counting EN as 1 (the 5th is also silkscreened PDN-UART but is not connected to the chip). Assumed R_SENSE 0.11 ohm (not verified). The TMC2208 has no UART addressing, so a second axis needs its own UART or a TMC2209.
+- Motor: HANPOSE 17HS4401S (NEMA 17, 40 mm body, 1.8 degree, 5 mm D-shaft). Seller listings disagree on ratings: about 1.5 to 1.7 A per phase, 1.5 to 1.8 ohm, 2.8 to 3.8 mH, 40 to 43 N.cm holding torque. Measured about 2.5 ohm per coil through the harness. Sketch 05's 400 mA is only about a quarter of rated current, so expect roughly a quarter of the holding torque: raise the current for the loaded build (the TMC2208 is rated 1.2 A RMS, so stay below that and fit a heatsink). This driver's motor pins are labelled OA1/OA2/OB1/OB2: OA1+OA2 are one driver coil and OB1+OB2 the other, so both wires of one MOTOR coil must go to the same driver coil. Wired and working: red OA1, green OA2, blue OB1, black OB2. Crossing the coils (red/green on OA1/OB1) gives a stuttering half-turn. Swapping the two wires of one coil only reverses direction.
 - Motor supply: 12 V brick (voltage, current and polarity NOT yet confirmed from its label). 100 uF cap across VM/GND at the driver, fuse about 3 A, physical e-stop cutting motor supply only, common ground with the ESP32.
 - Pins: STEP 25, DIR 26, EN 27 (active low). Limit sensors GPIO 34 and 35 (input-only). Buttons TBD. Avoid strapping pins 0/2/12/15, flash pins 6-11, and ADC2 while WiFi is on.
 - Limit sensor: BIQU optical endstop (TCST2103), powered at 3.3 V, TESTED as active-LOW when blocked.
@@ -22,9 +23,9 @@ Motorise a ceiling-mounted camera boom so it swings horizontally around a vertic
 - Upload: macOS, port /dev/cu.usbserial-8410. Uploads failed at 921600 baud; use 115200.
 
 ## Status
-Working and tested: blink + button, optical endstop, sketch 03 WiFi station mode (joins the home network, gets 10.0.0.100 from the router). TMC2208 UART test (sketch 04) PASSES. Written but UNTESTED: AP fallback path (not confirmed).
-Not yet done: first motor move, homing, UI.
-Next step: sketches/05 first motor move, motor connected but unloaded, low current (~400 mA), slow. Identify the two coil pairs with a multimeter first. Power off before connecting the motor.
+Working and tested: blink + button, optical endstop, sketch 03 WiFi station mode (joins the home network, gets 10.0.0.100 from the router). TMC2208 UART test (sketch 04) PASSES. Sketch 05 first motor move: unloaded motor turns smoothly at 397 mA, 16 microsteps, up to 2800 Hz, no driver faults (user-confirmed it works well; exactly one revolution per 3200 steps was assumed, not explicitly measured). Written but UNTESTED: AP fallback path (not confirmed).
+Not yet done: homing on the optical endstop, absolute moves in degrees, buttons, web UI, loaded test with belt and boom, fuse and e-stop wiring. Still unverified: the 12 V brick label (voltage/current/polarity) and R_SENSE.
+Next step: sketch 06: home slowly to the optical endstop (GPIO 34, active-LOW), back off, treat that as 0 degrees, then absolute moves in degrees with STEPS_PER_DEGREE in config.h; motor stays disabled until homed. Set step-rate limits from the real ratio (about 16:1, roughly 4 kHz for a 4 s 120 degree move at 16 microsteps), not sketch 05's 3200 Hz test cap.
 
 ## Safety requirements
 Boom swings at head height. Hardware e-stop independent of firmware and WiFi. Soft limits plus a physical stop. Finite moves only; jog must stop if the client heartbeat is lost. Home at low speed. Motor stays disabled until homed.
