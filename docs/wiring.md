@@ -67,6 +67,21 @@ TESTED wiring:
 
 Result: smooth rotation at 397 mA and 16 microsteps, no driver faults. 3200 steps per revolution is assumed (200 full steps x 16) and one turn per 3200 steps has not been explicitly measured. Wiring red/green/blue/black to OA1/OB1/OA2/OB2 (crossing the coils) gives a stuttering half-turn. Swapping the two wires within a coil only reverses direction. Never connect or disconnect the motor with the supply on.
 
+## Planned driver change: Adafruit TMC2209 (PLANNED, not tested)
+
+The TMC2208 wiring above is the current, working setup. When the Adafruit TMC2209 breakout (ADA6121) arrives, it replaces the BTT module. It is a complete driver board, not a carrier for the TMC2208. From Adafruit's guide (the board has not been seen yet):
+
+- 5 to 29 V motor supply on the **+** terminal, up to 2 A set by the pot (UART can override it), heatsink not included. Keep the 470 uF capacitor; the board has its own 22 uF.
+- **VDD** takes 3 to 5 V: wire it to ESP32 3V3, not 5V.
+- Single **UART** pin with auto-baud. GPIO 16 direct plus GPIO 17 through the 1k resistor, as now. No J2 jumper and no 4th/5th pin confusion.
+- Motor pins are labelled **1A, 1B, 2A, 2B**: red + green to 1A/1B, blue + black to 2A/2B. Both wires of a motor coil stay on the same pair.
+- SPRD jumper open = StealthChop. STEP, DIR and EN stay on GPIO 25, 26 and 27. The sensors are unchanged.
+- Optional DIAG output (StallGuard / fault) is not wired.
+
+Not yet known: the board's sense resistor value (find it on the schematic and set `R_SENSE`; do not reuse 0.11 ohm), and how MS1/MS2 set the UART address (check before leaving them open or adding a second axis on one UART line).
+
+On arrival: bench-test UART with the motor disconnected (chip version should read 0x21), then an unloaded move, before the loaded boom.
+
 ## Power
 
 - Motor supply: 12 V brick. Voltage, current and polarity are **not yet confirmed from its label**. Check before wiring.
