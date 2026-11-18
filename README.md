@@ -4,6 +4,27 @@ ESP32 firmware to motorise a ceiling-mounted camera boom. The boom swings horizo
 
 Design decisions, safety requirements and working rules live in [AGENTS.md](AGENTS.md). Wiring and bring-up are in [docs/wiring.md](docs/wiring.md).
 
+## Hardware components
+
+![Aluminium lazy-susan bearing, 200 mm (8 inch)](docs/lazy_susan_bearing.png)
+
+*The 200 mm aluminium lazy-susan bearing the boom turns on. The inner ring is fixed to the hanging structure; the outer ring rotates with the boom and carries the belt.*
+
+| Part | Details | Status |
+|---|---|---|
+| Bearing | 200 mm (8 inch) aluminium lazy-susan ball bearing, small amount of drag | Owned |
+| Frame | 2020/2040 aluminium extrusion hanging structure; the boom is balanced, about 50 cm from the pole axis | Design |
+| Belt drive | 6 mm GT2 open belt around the outer ring, ends anchored on the far side, screw tensioner (no springs, so the drive is not elastic); 20-tooth GT2 motor pulley and two smooth idlers on a fixed plate | Design. Ratio about 16:1 and about 17,000 microsteps per 120 degrees at 16 microsteps are estimates until calibrated |
+| Motor | HANPOSE 17HS4401S, NEMA 17, 40 mm, 1.8 degree, 5 mm D shaft. Listings disagree on current (1.5 to 1.7 A) and resistance; about 2.5 ohm per coil measured | Tested, runs smoothly and quietly |
+| Driver | BIGTREETECH TMC2208 V3.0 (UART variant), run at 400 mA for bench tests. Planned: Adafruit TMC2209 breakout (ADA6121), see [docs/wiring.md](docs/wiring.md) | TMC2208 tested. TMC2209 planned, untested |
+| Controller | ESP32 30-pin dev board (CH340, ESP32-D0WD-V3), 3.3 V logic. Classic ESP32 only | Tested |
+| Limit sensors | Two BIQU optical endstop boards (TCST2103), 3.3 V, active-HIGH, on GPIO 34 (CW) and GPIO 35 (CCW) | Tested |
+| Power | 12 V supply and a 470 uF capacitor across the driver supply. Planned: about 3 A fuse and a normally closed e-stop that cuts the motor supply only | Supply label (voltage, current, polarity) not confirmed. Fuse and e-stop not wired |
+| Hard stops | Mechanical stops on the fixed structure beyond each sensor | Planned. Distance to be decided |
+| Controls | Two physical buttons (go to 0, go to 120) and a tablet web UI | Buttons not written. Web UI started in sketch 07 |
+
+Figures marked as estimates, and anything not confirmed, still need checking on the real hardware. The sense resistor on the TMC2208 module (assumed 0.11 ohm) is also unconfirmed.
+
 ## Wiring diagram
 
 ![Complete wiring diagram](docs/wiring_diagram.png)
