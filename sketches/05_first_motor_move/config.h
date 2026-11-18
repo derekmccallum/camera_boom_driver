@@ -1,5 +1,5 @@
 // config.h - pins and tunables for the first motor move test.
-// UNTESTED on hardware. R_SENSE below is still NOT verified.
+// Tested on hardware: passed. R_SENSE below is still NOT verified.
 #pragma once
 
 // Motor driver pins

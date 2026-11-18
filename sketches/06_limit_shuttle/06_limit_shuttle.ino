@@ -9,9 +9,9 @@
 // switch, keep the boom area clear, and keep a physical stop in place.
 // Send 's' in the serial monitor to abort at any time.
 //
-// STATUS: UNTESTED on hardware. Written without hardware access; report any
-// compile errors or odd behaviour. The FastAccelStepper calls were checked
-// against the installed library header (version 2.0.1), not run.
+// STATUS: tested on hardware: passed. Report any compile errors or odd behaviour.
+// The FastAccelStepper calls were checked against the installed library header
+// (version 2.0.1).
 //
 // WIRING (use the labels printed on each sensor PCB, not the cable plug order):
 //   CW  sensor:  V -> ESP32 3V3 (NOT 5V),  G -> ESP32 GND,  S -> GPIO 34

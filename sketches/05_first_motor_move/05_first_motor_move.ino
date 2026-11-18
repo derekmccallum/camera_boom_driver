@@ -19,8 +19,8 @@
 //
 // Serial monitor: 115200 baud, line ending can be anything.
 //
-// STATUS: UNTESTED on hardware. Written without hardware access; report any
-// compile errors or odd behaviour.
+// STATUS: tested on hardware: passed (unloaded motor turns smoothly, no driver
+// faults). Report any compile errors or odd behaviour.
 //
 // Libraries: TMCStepper, FastAccelStepper (Arduino Library Manager).
 

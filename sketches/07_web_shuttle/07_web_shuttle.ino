@@ -21,10 +21,9 @@
 // Serial monitor (115200 baud): 's' = STOP (same as the page), 'g' = start/resume,
 // 'd' = hard stop and disable (reset the board to restart), '?' = status.
 //
-// STATUS: UNTESTED on hardware. Written without hardware access; report any
-// compile errors or odd behaviour. Compiled for ESP32 Dev Module only.
-// Not yet confirmed: live speed changes during a leg (applySpeedAcceleration), the
-// AP fallback path, and that CW_IS_DIR_HIGH really turns the boom clockwise.
+// STATUS: Tested on the boom: all features passed (START/STOP, resume, live speed
+// changes, clockwise direction). Compiled for ESP32 Dev Module only. Report any
+// compile errors or odd behaviour. Not yet confirmed: the AP fallback path.
 //
 // SETUP: copy secrets.example.h to secrets.h and fill in your network details.
 //   cp secrets.example.h secrets.h

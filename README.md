@@ -37,18 +37,17 @@ Built up in small steps, so each hardware or software unknown is proven on its o
 
 | Sketch | Purpose | State |
 |---|---|---|
-| `01_blink_button` | Toolchain, upload, serial, input reading | Earlier version tested on hardware |
-| `02_opto_endstop` | Optical limit sensor (active-HIGH as wired) | Earlier version tested; polarity constant since corrected, not re-run |
+| `01_blink_button` | Toolchain, upload, serial, input reading | Tested on hardware: passed |
+| `02_opto_endstop` | Optical limit sensor (active-HIGH as wired) | Tested on hardware: passed (active-HIGH) |
 | `03_wifi_ap_test` | Joins home WiFi (DHCP), serves test page; falls back to own access point | Station mode tested on hardware (joins home WiFi, DHCP). AP fallback untested |
 | `04_tmc2208_uart_test` | TMC2208 UART read/write check, no motion | Tested on hardware: PASS |
 | `05_first_motor_move` | First motor motion: unloaded, 400 mA, slow, serial-commanded finite moves, idle auto-disable | Tested on hardware: turns smoothly, no driver faults (3200 steps/rev assumed) |
-| `06_limit_shuttle` | Unloaded, 400 mA. Auto-starts after a 5 s countdown: seeks the CW sensor, measures travel to the CCW sensor, then shuttles between them forever, logging the position error at each hit | UNTESTED on hardware (compiles for ESP32 Dev Module). Sensors measured active-HIGH on the bench (conflicts with the active-LOW note for sketch 02). Clockwise DIR level unverified |
+| `06_limit_shuttle` | Unloaded, 400 mA. Auto-starts after a 5 s countdown: seeks the CW sensor, measures travel to the CCW sensor, then shuttles between them forever, logging the position error at each hit | Tested on hardware: passed. Sensors measured active-HIGH on the bench (conflicts with the active-LOW note for sketch 02) |
+| `07_web_shuttle` | Sketch 06's ping-pong shuttle driven from a web page: joins home WiFi (DHCP, AP fallback), START/STOP button and a live speed slider. Waits for START (no auto-start); STOP decelerates and holds, START resumes | Tested on the boom: all features passed (START/STOP, resume, live speed slider). AP fallback path not confirmed. Needs its own `secrets.h` |
 
-| `07_web_shuttle` | Sketch 06's ping-pong shuttle driven from a web page: joins home WiFi (DHCP, AP fallback), START/STOP button and a live speed slider. Waits for START (no auto-start); STOP decelerates and holds, START resumes | UNTESTED on hardware (compiles for ESP32 Dev Module). Needs its own `secrets.h` |
+Sketches 01 to 07 have passed on hardware. Only the access point fallback path in 03 and 07 (used when the home network cannot be joined) is not confirmed.
 
-"Earlier version tested" means the original single-file sketch ran on the real board. Sketches 01 to 03 have since been split into a `config.h` per sketch and have not been recompiled, so report anything that fails to build.
-
-Not yet written: homing in the final form, absolute moves in degrees, buttons, the web UI. Sketch 06 contains a first seek-to-limit, but it is untested.
+Not yet written: absolute moves in degrees (including an eased sweep over a set duration), the two physical buttons, the rest of the web UI (go to angle, presets, jog, home offset) and a hardware e-stop with firmware support. Sketches 06 and 07 already home to the CW limit and shuttle between the sensors.
 
 ## Setup
 

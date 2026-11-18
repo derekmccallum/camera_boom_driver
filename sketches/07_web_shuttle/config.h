@@ -1,5 +1,5 @@
 // config.h - pins and tunables for the web-controlled limit shuttle.
-// UNTESTED on hardware. R_SENSE below is still NOT verified.
+// Tested on the boom (sketch 07 passed). R_SENSE below is still NOT verified.
 // Sensor polarity was measured on the bench: both active-HIGH (see below).
 // Network name and passwords live in secrets.h (gitignored).
 #pragma once

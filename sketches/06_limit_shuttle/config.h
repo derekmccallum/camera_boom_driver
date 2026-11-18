@@ -1,5 +1,5 @@
 // config.h - pins and tunables for the limit-to-limit shuttle test.
-// UNTESTED on hardware as a full run. R_SENSE below is still NOT verified.
+// Tested on hardware: passed. R_SENSE below is still NOT verified.
 // Sensor polarity was measured on the bench: both active-HIGH (see below).
 #pragma once
 

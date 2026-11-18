@@ -100,7 +100,7 @@ On arrival: bench-test UART with the motor disconnected (chip version should rea
 
 TESTED as currently wired at 3.3 V: ACTIVE-HIGH (signal reads LOW with the beam clear and HIGH when the beam is blocked, sensor LED lit when blocked). An earlier note here said active-LOW; that was an inference from sketch 02's LED behaviour and is superseded by the measurement with sketch 06's `?` command. One reviewer reported the supplied cable plug order not matching the board's pin labels, so wire by the PCB labels.
 
-### Second sensor and the shuttle sketch (UNTESTED)
+### Second sensor and the shuttle sketch (tested)
 
 Sketch `06_limit_shuttle` uses two sensors, one at each end of the travel. Wire the second sensor the same way as the first, by the PCB labels:
 
@@ -135,18 +135,19 @@ Wiring notes:
 - Mount a hard mechanical stop beyond each sensor, and make each flag long enough that the boom can finish decelerating while the sensor is still blocked. An optical sensor that loses power or a wire that falls off reads "clear", so the firmware cannot rely on the sensors alone.
 
 - MEASURED on the bench with sketch 06's `?` command: with the beams clear both pins read LOW, and a blocked beam makes that sensor's pin read HIGH (active-HIGH, sensor LED lit when blocked). So `CW_BLOCKED_IS_HIGH` and `CCW_BLOCKED_IS_HIGH` in `sketches/06_limit_shuttle/config.h` are both `true`. The user has confirmed this measurement is correct. Re-check with `?` (raw pin levels, beam clear and blocked) if a sensor is swapped or rewired.
-- UNTESTED. Which DIR level turns the boom clockwise depends on how the motor is mounted: `CW_IS_DIR_HIGH` in the same file. Watch the first run. If the boom goes the wrong way it reaches the other sensor first and the sketch stops with "wrong limit: check direction or sensor wiring"; flip the constant and reset.
+- Tested: the direction is correct on the boom as built. Which DIR level turns the boom clockwise depends on how the motor is mounted: `CW_IS_DIR_HIGH` in the same file. If the motor is ever remounted or rewired and the boom goes the wrong way it reaches the other sensor first and the sketch stops with "wrong limit: check direction or sensor wiring"; flip the constant and reset.
 - The sketch auto-starts 5 s after boot (send `s` to abort). It is unloaded-motor only at 400 mA. Keep a hand on the e-stop and a physical stop in place: an optical sensor that loses power or a wire that falls off reads "clear".
 - Both sensors blocked at once, or either sensor on a cable fault that makes it read blocked, ends in a fault and a disabled motor.
 
 ## Bring-up order
 
 1. `01_blink_button` - done
-2. `02_opto_endstop` - done (sketch config now set active-HIGH to match the measured wiring; not re-run since)
+2. `02_opto_endstop` - done (sketch config set active-HIGH to match the measured wiring)
 3. `03_wifi_ap_test` - done (station mode on the home network; AP fallback untested)
 4. `04_tmc2208_uart_test` - done: PASS with motor disconnected, 12 V on VM, EN held HIGH
 5. `05_first_motor_move` - done: unloaded motor, 400 mA, smooth
-6. `06_limit_shuttle` - written, PASS: seek CW limit, measure travel, shuttle between both sensors
-7. Homing on the optical endstop, then absolute moves in degrees (next)
-8. Buttons, then the web UI and saved presets
-9. Calibrate steps per degree on the real arm
+6. `06_limit_shuttle` - PASS: seek CW limit, measure travel, shuttle between both sensors
+7. `07_web_shuttle` - PASS on the boom: web page with START/STOP and a live speed slider
+8. Absolute moves in degrees (next)
+9. Buttons, then the rest of the web UI and saved presets
+10. Calibrate steps per degree on the real arm

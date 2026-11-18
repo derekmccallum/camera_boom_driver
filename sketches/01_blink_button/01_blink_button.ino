@@ -1,9 +1,7 @@
 // 01_blink_button
 // Proves the toolchain, upload, serial and input reading work.
 //
-// STATUS: an earlier version of this sketch was run on the real board and
-// worked (LED toggled, serial output correct). It has since been split out
-// into config.h and has NOT been recompiled. Flag anything that fails.
+// STATUS: tested on the real board: passed (LED toggled, serial output correct).
 //
 // Wiring (optional): button between GPIO 32 and GND.
 
