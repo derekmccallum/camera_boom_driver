@@ -1,24 +1,24 @@
 # Wiring
 
-Wiring notes. Sections are marked TESTED where the arrangement has been run on the real hardware, and otherwise are plans. Go by the silkscreen on your own boards, not by the standard StepStick layout: this BTT driver's pin names and the PDN_UART pin position both differ from what the standard layout suggests. Calculated figures (ratio, steps per degree, current) are estimates.
+Wiring notes. Sections are marked TESTED where the arrangement has been run on the real hardware, and otherwise are plans. Go by the silkscreen on your own boards. The driver is now an Adafruit TMC2209 breakout, which replaced the BTT TMC2208 V3.0 on 2026-11-19; the TMC2208 notes are kept below for reference. Calculated figures (ratio, steps per degree, current) are estimates.
 
 ## Wiring diagram
 
 ![Complete wiring diagram](wiring_diagram.png)
 
-Solid lines are built and tested; the fuse and e-stop are planned and drawn dashed. Buttons and a second axis are not drawn. The 12 V brick's label, the driver's pin order and the TX resistor value are unconfirmed, so go by the silkscreen on each module. The tables below are the detail behind this diagram.
+The diagram shows the Adafruit TMC2209 wiring. Solid lines are built; the fuse and e-stop are planned and drawn dashed. Buttons and a second axis are not drawn. The 12 V brick's label, the Adafruit board's pin order and the TX resistor value are unconfirmed, so go by the silkscreen on each module. The tables below are the detail behind this diagram.
 
 ## ESP32 pin plan
 
-STEP, DIR, EN and the UART pins below are TESTED with sketches 04 and 05. The second limit sensor and the buttons are still plans.
+STEP, DIR, EN and the UART pins below were TESTED with sketches 04 and 05 on the TMC2208, and the motor runs on the same pins with the Adafruit TMC2209 (user-confirmed; the pins are assumed unchanged). The second limit sensor and the buttons are still plans.
 
 | Function | GPIO | Notes |
 |---|---|---|
 | STEP | 25 | to driver STEP |
 | DIR | 26 | to driver DIR |
 | EN | 27 | active LOW: HIGH disables the motor |
-| TMC2208 UART RX | 16 | direct to PDN_UART |
-| TMC2208 UART TX | 17 | through 1k to PDN_UART |
+| Driver UART RX | 16 | direct to the driver's UART pin |
+| Driver UART TX | 17 | through 1k to the same UART pin |
 | Limit sensor A | 34 | input-only, no internal pull-up |
 | Limit sensor B | 35 | input-only, no internal pull-up |
 | Buttons | TBD | |
@@ -26,7 +26,9 @@ STEP, DIR, EN and the UART pins below are TESTED with sketches 04 and 05. The se
 
 Avoid GPIO 0, 2, 12, 15 (boot strapping) for motor signals, GPIO 6-11 (flash), and ADC2 pins while WiFi is on. GPIO 34-39 are input-only.
 
-## TMC2208 (BIGTREETECH V3.0, UART variant)
+## Previous driver: TMC2208 (BIGTREETECH V3.0, UART variant), replaced
+
+Replaced by the Adafruit TMC2209 (see the section below) on 2026-11-19. Kept as a record of what was tested with it.
 
 | Driver pin | Connect to |
 |---|---|
@@ -50,13 +52,13 @@ Avoid GPIO 0, 2, 12, 15 (boot strapping) for motor signals, GPIO 6-11 (flash), a
 
 ## Motor (HANPOSE 17HS4401S, NEMA 17, 4-wire harness)
 
-Seller listings disagree on the ratings: about 1.5 to 1.7 A per phase, 1.5 to 1.8 ohm, 2.8 to 3.8 mH, 40 to 43 N.cm holding torque. Torque scales roughly with current, so the 400 mA used in the bench tests gives only about a quarter of the holding torque. For the loaded build use a higher current (roughly 800 to 1000 mA RMS to start, below the TMC2208's 1.2 A RMS rating), fit the heatsink, and watch driver and motor temperatures.
+Seller listings disagree on the ratings: about 1.5 to 1.7 A per phase, 1.5 to 1.8 ohm, 2.8 to 3.8 mH, 40 to 43 N.cm holding torque. Torque scales roughly with current, so the 400 mA used in the bench tests gives only about a quarter of the holding torque. For the loaded build use a higher current (roughly 800 to 1000 mA RMS to start, below the TMC2208's 1.2 A RMS rating; the Adafruit TMC2209 is rated up to 2 A, but stay near the motor's own rating), fit the heatsink, and watch driver and motor temperatures.
 
-This driver's motor pins are labelled **OA1, OA2, OB1, OB2** (not 1A/1B/2A/2B). OA1 and OA2 are the two ends of one driver coil, and OB1 and OB2 are the two ends of the other. Both wires of one MOTOR coil must go to the SAME driver coil.
+The old TMC2208's motor pins were labelled **OA1, OA2, OB1, OB2** (not 1A/1B/2A/2B). OA1 and OA2 are the two ends of one driver coil, and OB1 and OB2 are the two ends of the other. Both wires of one MOTOR coil must go to the SAME driver coil.
 
 Measured through the harness: each coil is about 2.5 ohm (more than the listed 1.5 to 1.8 ohm, probably meter lead and cable resistance). Colours do NOT follow the common convention on this harness: red/green is one coil and blue/black the other, so always measure.
 
-TESTED wiring:
+TESTED wiring on the TMC2208 (see the Adafruit TMC2209 section for the current wiring):
 
 | Motor wire | Motor coil | Driver pin |
 |---|---|---|
@@ -67,20 +69,34 @@ TESTED wiring:
 
 Result: smooth rotation at 397 mA and 16 microsteps, no driver faults. 3200 steps per revolution is assumed (200 full steps x 16) and one turn per 3200 steps has not been explicitly measured. Wiring red/green/blue/black to OA1/OB1/OA2/OB2 (crossing the coils) gives a stuttering half-turn. Swapping the two wires within a coil only reverses direction. Never connect or disconnect the motor with the supply on.
 
-## Planned driver change: Adafruit TMC2209 (PLANNED, not tested)
+## Driver: Adafruit TMC2209 (ADA6121), in use
 
-The TMC2208 wiring above is the current, working setup. When the Adafruit TMC2209 breakout (ADA6121) arrives, it replaces the BTT module. It is a complete driver board, not a carrier for the TMC2208. From Adafruit's guide (the board has not been seen yet):
+The Adafruit TMC2209 breakout replaced the BTT TMC2208 on 2026-11-19 and the motor runs (user-confirmed). It is a complete driver board, not a carrier for the TMC2208.
 
-- 5 to 29 V motor supply on the **+** terminal, up to 2 A set by the pot (UART can override it), heatsink not included. Keep the 470 uF capacitor; the board has its own 22 uF.
-- **VDD** takes 3 to 5 V: wire it to ESP32 3V3, not 5V.
-- Single **UART** pin with auto-baud. GPIO 16 direct plus GPIO 17 through the 1k resistor, as now. No J2 jumper and no 4th/5th pin confusion.
-- Motor pins are labelled **1A, 1B, 2A, 2B**: red + green to 1A/1B, blue + black to 2A/2B. Both wires of a motor coil stay on the same pair.
-- SPRD jumper open = StealthChop. STEP, DIR and EN stay on GPIO 25, 26 and 27. The sensors are unchanged.
-- Optional DIAG output (StallGuard / fault) is not wired.
+Motor wiring, as built (both wires of one motor coil stay on the same pair):
 
-Not yet known: the board's sense resistor value (find it on the schematic and set `R_SENSE`; do not reuse 0.11 ohm), and how MS1/MS2 set the UART address (check before leaving them open or adding a second axis on one UART line).
+| Motor wire | Motor coil | Driver pin |
+|---|---|---|
+| Red | coil 1 | 1A |
+| Green | coil 1 | 1B |
+| Blue | coil 2 | 2A |
+| Black | coil 2 | 2B |
 
-On arrival: bench-test UART with the motor disconnected (chip version should read 0x21), then an unloaded move, before the loaded boom.
+Logic and power wiring:
+
+| Driver signal | Connect to |
+|---|---|
+| UART (single pin) | GPIO 16 direct and GPIO 17 through the 1k resistor, joined at the board's single UART pin (the same arrangement as the TMC2208; the resistor was not re-confirmed) |
+| STEP / DIR / EN | GPIO 25 / 26 / 27 (assumed unchanged) |
+| VDD | ESP32 3V3, not 5V (per Adafruit's guide; not re-confirmed) |
+| VM (motor +) and GND | 12 V supply via the planned fuse and e-stop; GND common with the ESP32 |
+
+From Adafruit's guide: 5 to 29 V motor supply, up to 2 A set by the pot (UART can override it), VDD 3 to 5 V, single-pin UART with auto-baud, SPRD jumper open = StealthChop, no heatsink included. The board has its own 22 uF capacitor; the 470 uF capacitor stays in the plan. The optional DIAG output is not wired.
+
+- First attempt: the motor ticked and rocked without turning, and it now works. The cause of the fix was not recorded. The usual cause is a coil wired to the wrong pair: keep red + green on 1A/1B and blue + black on 2A/2B.
+- Sketches 04 to 08 still use the `TMC2208Stepper` class and `R_SENSE` 0.11 ohm. They drive the TMC2209 (user-confirmed), but the sense resistor on this board is NOT verified (find it on Adafruit's schematic), so the real motor current can differ from `MOTOR_RMS_CURRENT_MA`. Check this before raising the current for the loaded boom.
+- Confirmed with sketch 08 (`08_web_boundaries`) on the TMC2209: it reports `chip version 0x21`, homed and responded correctly to all commands.
+- Not recorded: the pot setting, the MS1/MS2 state and how MS1/MS2 set the UART address. A second axis on the same UART needs those checked.
 
 ## Power
 
@@ -141,6 +157,8 @@ Wiring notes:
 
 ## Bring-up order
 
+Steps 1 to 7 were run with the BTT TMC2208. The driver was then swapped for the Adafruit TMC2209 (see above) and sketch 08 passed on it; whether sketches 04 to 07 were re-run on it was not recorded.
+
 1. `01_blink_button` - done
 2. `02_opto_endstop` - done (sketch config set active-HIGH to match the measured wiring)
 3. `03_wifi_ap_test` - done (station mode on the home network; AP fallback untested)
@@ -148,6 +166,7 @@ Wiring notes:
 5. `05_first_motor_move` - done: unloaded motor, 400 mA, smooth
 6. `06_limit_shuttle` - PASS: seek CW limit, measure travel, shuttle between both sensors
 7. `07_web_shuttle` - PASS on the boom: web page with START/STOP and a live speed slider
-8. Absolute moves in degrees (next)
-9. Buttons, then the rest of the web UI and saved presets
-10. Calibrate steps per degree on the real arm
+8. `08_web_boundaries` - PASS on the boom with the Adafruit TMC2209 (chip version 0x21): seeks both sensors at boot to learn the working area, goes home, web START/STOP, speed slider, RESET, HOME
+9. Absolute moves in degrees (next)
+10. Buttons, then the rest of the web UI and saved presets
+11. Calibrate steps per degree on the real arm
