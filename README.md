@@ -1,6 +1,8 @@
 # camera_boom_driver
 
-ESP32 firmware to motorise a ceiling-mounted camera boom. The boom swings horizontally around a vertical pole through up to 120 degrees, driven by a stepper motor and a GT2 belt on a 200 mm lazy-susan bearing. Control is by two physical buttons (go to 0, go to 120) and, later, a tablet web UI served by the ESP32 over its own WiFi network. A second (tilt) axis may be added later.
+A motorised, ceiling-mounted camera boom.
+
+ESP32 firmware to motorise a ceiling-mounted camera boom. The boom swings horizontally around a vertical pole through up to 180 degrees, driven by a stepper motor and GT2 belt on a 200 mm lazy-susan bearing. Control is by a web UI served by the ESP32 over its own WiFi network. A second (tilt) axis may be added later.
 
 Design decisions, safety requirements and working rules live in [AGENTS.md](AGENTS.md). Wiring and bring-up are in [docs/wiring.md](docs/wiring.md). Serial monitor commands for each sketch are in [docs/serial_commands.md](docs/serial_commands.md). Speed, acceleration and current settings are in [docs/speed_and_current.md](docs/speed_and_current.md). What is still to do is in [docs/outstanding.md](docs/outstanding.md).
 
