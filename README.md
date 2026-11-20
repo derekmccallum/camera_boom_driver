@@ -12,18 +12,51 @@ Design decisions, safety requirements and working rules live in [AGENTS.md](AGEN
 
 | Part | Details | Status |
 |---|---|---|
-| Bearing | 200 mm (8 inch) aluminium lazy-susan ball bearing, small amount of drag | Owned |
-| Frame | 2020/2040 aluminium extrusion hanging structure; the boom is balanced, about 50 cm from the pole axis | Design |
-| Belt drive | 6 mm GT2 open belt around the outer ring, ends anchored on the far side, screw tensioner (no springs, so the drive is not elastic); 20-tooth GT2 motor pulley and two smooth idlers on a fixed plate | Design. Ratio about 16:1 and about 17,000 microsteps per 120 degrees at 16 microsteps are estimates until calibrated |
+| Bearing | 200 mm (8 inch) aluminium lazy-susan ball bearing, small amount of drag | Owned. Moment load from the arm tested, fine (user) |
+| Frame | 2020/2040 aluminium extrusion hanging structure; the boom is balanced, about 50 cm from the pole axis. The controller is built on the top 2040; the arm will attach to the 2040 on the underside of the bearing | Controller built (photos below). Arm not fitted yet |
+| Belt drive | 6 mm GT2 open belt around the outer ring, ends anchored on the far side, screw tensioner (no springs, so the drive is not elastic); 20-tooth GT2 motor pulley and two smooth idlers on a fixed plate | Built. 20-tooth pulley and 200 mm ring confirmed (user). Belt limits travel to about 320 degrees (user). Ratio about 16:1 and about 17,000 microsteps per 120 degrees at 16 microsteps are calculated, not measured, until calibrated |
 | Motor | HANPOSE 17HS4401S, NEMA 17, 40 mm, 1.8 degree, 5 mm D shaft. Listings disagree on current (1.5 to 1.7 A) and resistance; about 2.5 ohm per coil measured | Tested, runs smoothly and quietly |
 | Driver | Adafruit TMC2209 breakout (ADA6121): 5 to 29 V, up to 2 A set by the pot, single UART pin; run at about 740 mA for bench tests (800 mA in sketch 09). It replaced the BIGTREETECH TMC2208 V3.0 (details in [docs/wiring.md](docs/wiring.md)) | Motor runs on it (user-confirmed). Sense resistors 0.05 ohm (Adafruit schematic) |
 | Controller | ESP32 30-pin dev board (CH340, ESP32-D0WD-V3), 3.3 V logic. Classic ESP32 only | Tested |
 | Limit sensors | Two BIQU optical endstop boards (TCST2103), 3.3 V, active-HIGH, on GPIO 34 (CW) and GPIO 35 (CCW) | Tested |
-| Power | 12 V supply and a 470 uF capacitor across the driver supply. Planned: about 3 A fuse and a normally closed e-stop that cuts the motor supply only | Supply label (voltage, current, polarity) not confirmed. Fuse and e-stop not wired |
+| Power | 12 V supply and a 470 uF, 35 V capacitor across the driver supply. The ESP32 shield has its own DC jack and is planned to run from a separate adapter supply. Planned: about 3 A fuse and a normally closed e-stop that cuts the motor supply only | Supply label (voltage, current, polarity) not confirmed. Fuse and e-stop not wired. Separate ESP32 supply not yet fitted |
 | Hard stops | Mechanical stops on the fixed structure beyond each sensor | Planned. Distance to be decided |
 | Controls | Two physical buttons (go to 0, go to 120) and a tablet web UI | Buttons not written. Web UI started in sketch 07, calibration and HOME/RESET in sketch 08 |
 
 Figures marked as estimates, and anything not confirmed, still need checking on the real hardware. The sense resistor on the Adafruit TMC2209 board is 0.05 ohm (Adafruit's schematic; the board marking "50" agrees). All sketches 04 to 09 now use 0.05 (04 to 08 were changed from 0.11 on 2026-11-20 and their current raised from 400 to 740 mA, which is the real current sketch 08 passed at on this board).
+
+## The built controller
+
+Photos taken 2026-11-20. The arm is not fitted yet.
+
+![Top view of the boom controller](docs/boom_controller_top_view.jpg)
+
+*Top view: the NEMA 17 (left), the ESP32 on its breakout shield and the Adafruit driver on the ply, the 2040 across the inner ring, and the belt anchor with its tensioner screw (right).*
+
+![Angled view from the motor end](docs/boom_controller_angled_view.jpg)
+
+*Angled view from the motor end: the ESP32 shield, the Adafruit TMC2209 with its green motor terminal block, and the 470 uF capacitor, all on the ply on top of the 2040.*
+
+![Side view of the boom controller](docs/boom_controller_side_view.jpg)
+
+*Side view: the electronics on top of the 2040, an optical sensor on a ply strip under it, the belt on the ring's rim and the anchor screw at the left.*
+
+![The belt drive](docs/boom_belt_drive_view.jpg)
+
+*The drive: 20-tooth motor pulley, two idlers and the belt on the outer ring, with the two optical sensors on ply strips inside the ring.*
+
+![Motor side view](docs/boom_motor_side_view.jpg)
+
+*The motor side (HANPOSE 17HS4401S label), with the pulley and belt and a sensor strip inside the ring, resting on the bench.*
+
+Layout (from you, 2026-11-20, unless marked otherwise):
+
+- **Mounting:** the motor, the optical sensors and the ESP32 are mounted on the top surface of the inner ring. The whole controller will be mounted from the top-side 2040, right next to the ply that holds the ESP32.
+- **Arm:** not connected yet. It will attach to the length of 2040 on the underside of the bearing.
+- **Drive:** a 20-tooth GT2 pulley on a 200 mm ring. A 20-tooth, 2 mm pitch pulley has a pitch diameter of about 12.7 mm, so the ratio is about 16:1 (200 / 12.7 is about 15.7). That is calculated, not measured, and still needs calibrating.
+- **Belt travel:** the open belt sets a real mechanical limit of about 320 degrees. The working sweep is much smaller (120 degrees in the design, 180 in sketch 09), so this is not a substitute for hard stops inside the working range.
+- **Bearing:** the moment load from the arm has been tested and is fine (how it was tested is not recorded).
+- **Power:** the capacitor is 470 uF, 35 V. The ESP32 shield has its own DC jack (6.5 to 16 V input); the plan is to power the ESP32 from a separate adapter or block supply. The e-stop on the motor supply will then leave the ESP32 running, and the two supplies need a common ground.
 
 ## Wiring diagram
 

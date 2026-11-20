@@ -34,7 +34,7 @@ Replaced by the Adafruit TMC2209 (see the section below) on 2026-11-19. Kept as 
 |---|---|
 | VM | 12 V positive, via about 3 A fuse (and e-stop later) |
 | GND (motor side) | Supply negative |
-| 100 uF capacitor | Across VM and GND at the driver (long lead positive) |
+| 470 uF, 35 V capacitor | Across VM and GND at the driver (long lead positive). This table originally said 100 uF; 470 uF is what is fitted (user-confirmed 2026-11-20) |
 | VIO | ESP32 3V3 |
 | GND (logic side) | ESP32 GND, common with supply negative |
 | EN / STEP / DIR | GPIO 27 / 25 / 26 |
@@ -91,11 +91,12 @@ Logic and power wiring:
 | VDD | ESP32 3V3, not 5V (per Adafruit's guide; not re-confirmed) |
 | VM (motor +) and GND | 12 V supply via the planned fuse and e-stop; GND common with the ESP32 |
 
-From Adafruit's guide: 5 to 29 V motor supply, up to 2 A set by the pot (UART can override it), VDD 3 to 5 V, single-pin UART with auto-baud, SPRD jumper open = StealthChop, no heatsink included. The board has its own 22 uF capacitor; the 470 uF capacitor stays in the plan. The optional DIAG output is not wired.
+From Adafruit's guide: 5 to 29 V motor supply, up to 2 A set by the pot (UART can override it), VDD 3 to 5 V, single-pin UART with auto-baud, SPRD jumper open = StealthChop, no heatsink included. The board has its own 22 uF capacitor; the 470 uF, 35 V capacitor is fitted across VM and GND (user-confirmed, visible in the photos). The optional DIAG output is not wired.
 
 - First attempt: the motor ticked and rocked without turning, and it now works. The cause of the fix was not recorded. The usual cause is a coil wired to the wrong pair: keep red + green on 1A/1B and blue + black on 2A/2B.
 - Sketches 04 to 08 still use the `TMC2208Stepper` class. They drive the TMC2209 (user-confirmed). `R_SENSE` was 0.11 ohm, which is wrong for this board: Adafruit's Eagle schematic (checked 2026-11-20) has R1 and R2 at 0.05 ohm on BRA and BRB, and the board marking "50" agrees. On 2026-11-20 they were changed to 0.05 and `MOTOR_RMS_CURRENT_MA` raised from 400 to 740 mA, which gives the same real current (about 740 mA) that sketch 08 ran at on this board.
 - Confirmed with sketch 08 (`08_web_boundaries`) on the TMC2209: it reports `chip version 0x21`, homed and responded correctly to all commands.
+- ESP32 power: the ESP32 shield has its own DC jack and is planned to run from a separate adapter or block supply (user, 2026-11-20; not yet fitted). The shield's DC input is rated 6.5 to 16 V and the jack is centre positive (user-confirmed); the plug outer diameter is 5.5 mm (user-confirmed), centre-pin size (2.1 or 2.5 mm) not yet measured. Do not use a laptop supply (most are 18 to 20 V). The e-stop on the motor supply will then not cut the ESP32, and the ESP32 and motor supplies need a common ground (the driver's logic GND to the ESP32 GND already provides one if both ground wires are fitted; check this when it is wired).
 - Not recorded: the pot setting, the MS1/MS2 state and how MS1/MS2 set the UART address. A second axis on the same UART needs those checked.
 
 ## Power
