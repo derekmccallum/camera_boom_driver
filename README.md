@@ -2,7 +2,7 @@
 
 ESP32 firmware to motorise a ceiling-mounted camera boom. The boom swings horizontally around a vertical pole through up to 120 degrees, driven by a stepper motor and a GT2 belt on a 200 mm lazy-susan bearing. Control is by two physical buttons (go to 0, go to 120) and, later, a tablet web UI served by the ESP32 over its own WiFi network. A second (tilt) axis may be added later.
 
-Design decisions, safety requirements and working rules live in [AGENTS.md](AGENTS.md). Wiring and bring-up are in [docs/wiring.md](docs/wiring.md).
+Design decisions, safety requirements and working rules live in [AGENTS.md](AGENTS.md). Wiring and bring-up are in [docs/wiring.md](docs/wiring.md). Serial monitor commands for each sketch are in [docs/serial_commands.md](docs/serial_commands.md). Speed, acceleration and current settings are in [docs/speed_and_current.md](docs/speed_and_current.md).
 
 ## Hardware components
 
@@ -16,14 +16,14 @@ Design decisions, safety requirements and working rules live in [AGENTS.md](AGEN
 | Frame | 2020/2040 aluminium extrusion hanging structure; the boom is balanced, about 50 cm from the pole axis | Design |
 | Belt drive | 6 mm GT2 open belt around the outer ring, ends anchored on the far side, screw tensioner (no springs, so the drive is not elastic); 20-tooth GT2 motor pulley and two smooth idlers on a fixed plate | Design. Ratio about 16:1 and about 17,000 microsteps per 120 degrees at 16 microsteps are estimates until calibrated |
 | Motor | HANPOSE 17HS4401S, NEMA 17, 40 mm, 1.8 degree, 5 mm D shaft. Listings disagree on current (1.5 to 1.7 A) and resistance; about 2.5 ohm per coil measured | Tested, runs smoothly and quietly |
-| Driver | Adafruit TMC2209 breakout (ADA6121): 5 to 29 V, up to 2 A set by the pot, single UART pin; run at 400 mA for bench tests. It replaced the BIGTREETECH TMC2208 V3.0 (details in [docs/wiring.md](docs/wiring.md)) | Motor runs on it (user-confirmed). Sense resistor not verified |
+| Driver | Adafruit TMC2209 breakout (ADA6121): 5 to 29 V, up to 2 A set by the pot, single UART pin; run at about 740 mA for bench tests (800 mA in sketch 09). It replaced the BIGTREETECH TMC2208 V3.0 (details in [docs/wiring.md](docs/wiring.md)) | Motor runs on it (user-confirmed). Sense resistors 0.05 ohm (Adafruit schematic) |
 | Controller | ESP32 30-pin dev board (CH340, ESP32-D0WD-V3), 3.3 V logic. Classic ESP32 only | Tested |
 | Limit sensors | Two BIQU optical endstop boards (TCST2103), 3.3 V, active-HIGH, on GPIO 34 (CW) and GPIO 35 (CCW) | Tested |
 | Power | 12 V supply and a 470 uF capacitor across the driver supply. Planned: about 3 A fuse and a normally closed e-stop that cuts the motor supply only | Supply label (voltage, current, polarity) not confirmed. Fuse and e-stop not wired |
 | Hard stops | Mechanical stops on the fixed structure beyond each sensor | Planned. Distance to be decided |
 | Controls | Two physical buttons (go to 0, go to 120) and a tablet web UI | Buttons not written. Web UI started in sketch 07, calibration and HOME/RESET in sketch 08 |
 
-Figures marked as estimates, and anything not confirmed, still need checking on the real hardware. The sense resistor on the Adafruit TMC2209 board (the sketches assume 0.11 ohm) is also unconfirmed, so the real motor current may differ from the setting.
+Figures marked as estimates, and anything not confirmed, still need checking on the real hardware. The sense resistor on the Adafruit TMC2209 board is 0.05 ohm (Adafruit's schematic; the board marking "50" agrees). All sketches 04 to 09 now use 0.05 (04 to 08 were changed from 0.11 on 2026-11-20 and their current raised from 400 to 740 mA, which is the real current sketch 08 passed at on this board).
 
 ## Wiring diagram
 
@@ -41,14 +41,15 @@ Built up in small steps, so each hardware or software unknown is proven on its o
 | `02_opto_endstop` | Optical limit sensor (active-HIGH as wired) | Tested on hardware: passed (active-HIGH) |
 | `03_wifi_ap_test` | Joins home WiFi (DHCP), serves test page; falls back to own access point | Station mode tested on hardware (joins home WiFi, DHCP). AP fallback untested |
 | `04_tmc2208_uart_test` | TMC2208 UART read/write check, no motion | Tested on hardware: PASS |
-| `05_first_motor_move` | First motor motion: unloaded, 400 mA, slow, serial-commanded finite moves, idle auto-disable | Tested on hardware: turns smoothly, no driver faults (3200 steps/rev assumed) |
-| `06_limit_shuttle` | Unloaded, 400 mA. Auto-starts after a 5 s countdown: seeks the CW sensor, measures travel to the CCW sensor, then shuttles between them forever, logging the position error at each hit | Tested on hardware: passed. Sensors measured active-HIGH on the bench (conflicts with the active-LOW note for sketch 02) |
+| `05_first_motor_move` | First motor motion: unloaded, 740 mA, slow, serial-commanded finite moves, idle auto-disable | Tested on hardware: turns smoothly, no driver faults (3200 steps/rev assumed) |
+| `06_limit_shuttle` | Unloaded, 740 mA. Auto-starts after a 5 s countdown: seeks the CW sensor, measures travel to the CCW sensor, then shuttles between them forever, logging the position error at each hit | Tested on hardware: passed. Sensors measured active-HIGH on the bench (conflicts with the active-LOW note for sketch 02) |
 | `07_web_shuttle` | Sketch 06's ping-pong shuttle driven from a web page: joins home WiFi (DHCP, AP fallback), START/STOP button and a live speed slider. Waits for START (no auto-start); STOP decelerates and holds, START resumes | Tested on the boom: all features passed (START/STOP, resume, live speed slider). AP fallback path not confirmed. Needs its own `secrets.h` |
 | `08_web_boundaries` | Self-calibrating web shuttle: after boot it seeks both optical sensors to learn the working area (sensors can be moved between sessions), goes home at the end chosen by `HOME_AT_CW_END` in `config.h`, then the page offers START/STOP (a run sweeps between the ends), a live speed slider, RESET (seek the boundaries again) and HOME. Starts moving by itself after a 5 s countdown (`AUTO_CALIBRATE_ON_BOOT`) | Tested on the boom with the Adafruit TMC2209: homed and responded correctly to all commands. AP fallback path not confirmed. Needs its own `secrets.h` |
+| `09_boom_v1` | First production version, built from sketch 08. Seek speed 2000 Hz. Run speed range set as the time for a 180 degree move (fastest 2.5 s, slowest 6 s, default slowest), acceleration proportional to speed (`RAMP_TIME_S`). START sends the boom one leg in the current direction to the far boundary and stops there with the motor holding, then flips the direction flag; the next START goes back. STOP decelerates and holds, and START then resumes to the same end. HOME and RESET as in 08. STOP & DISABLE MOTOR button: decelerates on the ramp, then switches the driver off so the boom can be moved by hand; afterwards the page accepts only RESET (it forgets the boundaries and seeks both sensors again) | UNTESTED on hardware, only syntax-checked. The speeds are far above anything tested before; the current is set to 800 mA for the unloaded boom (untested). Needs its own `secrets.h` |
 
-The driver was switched to the Adafruit TMC2209 on 2026-11-19 and the motor runs. Sketches 04 to 08 still use the `TMC2208Stepper` class and a 0.11 ohm sense resistor value that is not verified for the new board. Sketches 01 to 08 have passed on hardware (08 on the Adafruit TMC2209). Only the access point fallback path in 03, 07 and 08 (used when the home network cannot be joined) is not confirmed.
+The driver was switched to the Adafruit TMC2209 on 2026-11-19 and the motor runs. Sketches 04 to 09 still use the `TMC2208Stepper` class. All of them use 0.05 ohm, the real sense resistor value of the new board (04 to 08 changed from 0.11 on 2026-11-20). Sketches 01 to 08 have passed on hardware (08 on the Adafruit TMC2209). Only the access point fallback path in 03, 07 and 08 (used when the home network cannot be joined) is not confirmed.
 
-Not yet written: absolute moves in degrees (including an eased sweep over a set duration), the two physical buttons, the rest of the web UI (go to angle, presets, jog) and a hardware e-stop with firmware support. Sketches 06 and 07 already home to the CW limit and shuttle between the sensors.
+Not yet written: absolute moves in degrees (go to angle, eased sweep over a set duration), the two physical buttons, the rest of the web UI (go to angle, presets, jog) and a hardware e-stop with firmware support. Sketches 06 and 07 already home to the CW limit and shuttle between the sensors.
 
 ## Setup
 
@@ -60,7 +61,7 @@ Not yet written: absolute moves in degrees (including an eased sweep over a set 
 
 ## WiFi credentials
 
-Your network name and passwords are not committed. Before building sketch 03 (and likewise 07 and 08):
+Your network name and passwords are not committed. Before building sketch 03 (and likewise 07, 08 and 09):
 
 ```
 cd sketches/03_wifi_ap_test

@@ -43,7 +43,7 @@ Replaced by the Adafruit TMC2209 (see the section below) on 2026-11-19. Kept as 
 | MS1, MS2 | Unconnected |
 
 - The V3.0 ships as STEP/DIR or UART. This unit has J2 bridged by a surface-mount link, so it is the UART variant. Do not alter J2.
-- `R_SENSE` is assumed 0.11 ohm and is not verified.
+- `R_SENSE`: assumed 0.11 ohm for the TMC2208 sketches. For the Adafruit TMC2209 Adafruit's schematic gives 0.05 ohm (R1 and R2; see the Adafruit section below); sketches 04 to 09 now use 0.05 (04 to 08 used 0.11 until 2026-11-20).
 - The TMC2208 needs VM present before it answers on UART.
 - **PDN_UART is the 4th header pin counting EN as 1** (EN, MS1, MS2, PDN_UART). Confirmed working on this unit. The GPIO 16 wire and the resistor from GPIO 17 must both land on that same pin. The 5th pin is also silkscreened PDN-UART but is NOT continuous with the 4th: leave it unconnected, and go by position, not by the label. Putting RX and TX on different pins gives zero bytes back.
 - TESTED. UART test (sketch 04) PASSED: chip version 0x20 (TMC2208), writes counted by IFCNT, read-back OK. The current read-back comes from the same R_SENSE the library used to write it, so it does not verify R_SENSE.
@@ -52,7 +52,7 @@ Replaced by the Adafruit TMC2209 (see the section below) on 2026-11-19. Kept as 
 
 ## Motor (HANPOSE 17HS4401S, NEMA 17, 4-wire harness)
 
-Seller listings disagree on the ratings: about 1.5 to 1.7 A per phase, 1.5 to 1.8 ohm, 2.8 to 3.8 mH, 40 to 43 N.cm holding torque. Torque scales roughly with current, so the 400 mA used in the bench tests gives only about a quarter of the holding torque. For the loaded build use a higher current (roughly 800 to 1000 mA RMS to start, below the TMC2208's 1.2 A RMS rating; the Adafruit TMC2209 is rated up to 2 A, but stay near the motor's own rating), fit the heatsink, and watch driver and motor temperatures.
+Seller listings disagree on the ratings: about 1.5 to 1.7 A per phase, 1.5 to 1.8 ohm, 2.8 to 3.8 mH, 40 to 43 N.cm holding torque. Torque scales roughly with current, so the bench tests (about 740 mA real on the Adafruit board, 400 mA on the old TMC2208) give only about half (a quarter on the TMC2208) of the holding torque. For the loaded build use a higher current (roughly 800 to 1000 mA RMS to start, below the TMC2208's 1.2 A RMS rating; the Adafruit TMC2209 is rated up to 2 A, but stay near the motor's own rating), fit the heatsink, and watch driver and motor temperatures.
 
 The old TMC2208's motor pins were labelled **OA1, OA2, OB1, OB2** (not 1A/1B/2A/2B). OA1 and OA2 are the two ends of one driver coil, and OB1 and OB2 are the two ends of the other. Both wires of one MOTOR coil must go to the SAME driver coil.
 
@@ -94,7 +94,7 @@ Logic and power wiring:
 From Adafruit's guide: 5 to 29 V motor supply, up to 2 A set by the pot (UART can override it), VDD 3 to 5 V, single-pin UART with auto-baud, SPRD jumper open = StealthChop, no heatsink included. The board has its own 22 uF capacitor; the 470 uF capacitor stays in the plan. The optional DIAG output is not wired.
 
 - First attempt: the motor ticked and rocked without turning, and it now works. The cause of the fix was not recorded. The usual cause is a coil wired to the wrong pair: keep red + green on 1A/1B and blue + black on 2A/2B.
-- Sketches 04 to 08 still use the `TMC2208Stepper` class and `R_SENSE` 0.11 ohm. They drive the TMC2209 (user-confirmed), but the sense resistor on this board is NOT verified (find it on Adafruit's schematic), so the real motor current can differ from `MOTOR_RMS_CURRENT_MA`. Check this before raising the current for the loaded boom.
+- Sketches 04 to 08 still use the `TMC2208Stepper` class. They drive the TMC2209 (user-confirmed). `R_SENSE` was 0.11 ohm, which is wrong for this board: Adafruit's Eagle schematic (checked 2026-11-20) has R1 and R2 at 0.05 ohm on BRA and BRB, and the board marking "50" agrees. On 2026-11-20 they were changed to 0.05 and `MOTOR_RMS_CURRENT_MA` raised from 400 to 740 mA, which gives the same real current (about 740 mA) that sketch 08 ran at on this board.
 - Confirmed with sketch 08 (`08_web_boundaries`) on the TMC2209: it reports `chip version 0x21`, homed and responded correctly to all commands.
 - Not recorded: the pot setting, the MS1/MS2 state and how MS1/MS2 set the UART address. A second axis on the same UART needs those checked.
 
@@ -152,7 +152,7 @@ Wiring notes:
 
 - MEASURED on the bench with sketch 06's `?` command: with the beams clear both pins read LOW, and a blocked beam makes that sensor's pin read HIGH (active-HIGH, sensor LED lit when blocked). So `CW_BLOCKED_IS_HIGH` and `CCW_BLOCKED_IS_HIGH` in `sketches/06_limit_shuttle/config.h` are both `true`. The user has confirmed this measurement is correct. Re-check with `?` (raw pin levels, beam clear and blocked) if a sensor is swapped or rewired.
 - Tested: the direction is correct on the boom as built. Which DIR level turns the boom clockwise depends on how the motor is mounted: `CW_IS_DIR_HIGH` in the same file. If the motor is ever remounted or rewired and the boom goes the wrong way it reaches the other sensor first and the sketch stops with "wrong limit: check direction or sensor wiring"; flip the constant and reset.
-- The sketch auto-starts 5 s after boot (send `s` to abort). It is unloaded-motor only at 400 mA. Keep a hand on the e-stop and a physical stop in place: an optical sensor that loses power or a wire that falls off reads "clear".
+- The sketch auto-starts 5 s after boot (send `s` to abort). It is unloaded-motor only at 740 mA. Keep a hand on the e-stop and a physical stop in place: an optical sensor that loses power or a wire that falls off reads "clear".
 - Both sensors blocked at once, or either sensor on a cable fault that makes it read blocked, ends in a fault and a disabled motor.
 
 ## Bring-up order
